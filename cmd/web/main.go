@@ -50,7 +50,7 @@ func main() {
 
 	host := "0.0.0.0"
 	port := "9999"
-	
+
 	srv := &http.Server {
 		Addr: net.JoinHostPort(host, port),
 		Handler: routes(&app),
