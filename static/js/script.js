@@ -20,31 +20,6 @@ let attention = Prompt();
     })
 })()
 
-document.getElementById("colorBtn").addEventListener("click", function() {
-  let html = `
-    <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
-      <div class="row">
-        <div class="col">
-          <div class="row" id="reservation-dates-modal">
-            <div class="col">
-              <input disabled required class="form-control" type="text" name="start" id="start" placeholder="Arrival">
-            </div>
-            <div class="col">
-              <input disabled required class="form-control" type="text" name="end" id="end" placeholder="Departure">
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
-  `
-  attention.custom({msg: html, title: "Choose your dates"});
-})
-
-const elem = document.getElementById('reservation-dates');
-const rangepicker = new DateRangePicker(elem, {
-  format: "yyyy-mm-dd",
-}); 
-
 function notify(msg, msgType) {
   notie.alert({
     type: "msgType",
@@ -119,18 +94,16 @@ function Prompt() {
         title = "",
       } = c;
 
-      const {value: formValues } = await Swal.fire({
+      const {value: result } = await Swal.fire({
         title: title,
         html: msg,
         backdrop: false,
         focusConfirm: false,
         showCancelButton: true,
         willOpen: () => {
-          const elem = document.getElementById('reservation-dates-modal');
-          const rp = new DateRangePicker(elem, {
-            format: 'yyyy-mm-dd',
-            showOnFocus: true,
-          })
+          if (c.willOpen !== undefined) {
+            c.willOpen();
+          } 
         },
         preConfirm: () => {
           return [
@@ -139,13 +112,23 @@ function Prompt() {
           ]
         },
         didOpen: () => {
-          document.getElementById('start').removeAttribute('disabled');
-          document.getElementById('end').removeAttribute('disabled');
+          if (c.didOpen !== undefined) {
+            c.didOpen();
+          } 
         }
       })
-
-      if (formValues) {
-        Swal.fire(JSON.stringify(formValues))
+      if (result) {
+        if (result.dismiss !== Swal.DismissReason.cancel) {
+          if (result.value !== "") {
+            if (c.callback !== undefined) {
+              c.callback(result);
+            }
+          } else {
+            c.callback(false);
+          }
+        } else {
+          c.callback(false);
+        }
       }
     }
 

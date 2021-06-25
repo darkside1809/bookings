@@ -10,9 +10,9 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 
-	"github.com/darkside1809/bookings/pkg/config"
-	"github.com/darkside1809/bookings/pkg/handlers"
-	"github.com/darkside1809/bookings/pkg/render"
+	"github.com/darkside1809/bookings/internal/config"
+	"github.com/darkside1809/bookings/internal/handlers"
+	"github.com/darkside1809/bookings/internal/render"
 )
 
 // App holds AppConfig structure
