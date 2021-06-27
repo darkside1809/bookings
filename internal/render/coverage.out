@@ -1,0 +1,23 @@
+mode: set
+github.com/darkside1809/bookings/internal/render/render.go:26.40,28.2 1 1
+github.com/darkside1809/bookings/internal/render/render.go:31.84,37.2 5 1
+github.com/darkside1809/bookings/internal/render/render.go:40.105,42.18 2 1
+github.com/darkside1809/bookings/internal/render/render.go:49.2,50.9 2 1
+github.com/darkside1809/bookings/internal/render/render.go:54.2,60.16 5 1
+github.com/darkside1809/bookings/internal/render/render.go:64.2,64.12 1 1
+github.com/darkside1809/bookings/internal/render/render.go:42.18,45.3 1 0
+github.com/darkside1809/bookings/internal/render/render.go:45.8,47.3 1 1
+github.com/darkside1809/bookings/internal/render/render.go:50.9,52.3 1 1
+github.com/darkside1809/bookings/internal/render/render.go:60.16,63.3 2 0
+github.com/darkside1809/bookings/internal/render/render.go:68.66,72.16 3 1
+github.com/darkside1809/bookings/internal/render/render.go:76.2,76.29 1 1
+github.com/darkside1809/bookings/internal/render/render.go:96.2,96.21 1 1
+github.com/darkside1809/bookings/internal/render/render.go:72.16,74.3 1 0
+github.com/darkside1809/bookings/internal/render/render.go:76.29,79.17 3 1
+github.com/darkside1809/bookings/internal/render/render.go:83.3,84.17 2 1
+github.com/darkside1809/bookings/internal/render/render.go:88.3,88.23 1 1
+github.com/darkside1809/bookings/internal/render/render.go:94.3,94.21 1 1
+github.com/darkside1809/bookings/internal/render/render.go:79.17,81.4 1 0
+github.com/darkside1809/bookings/internal/render/render.go:84.17,86.4 1 0
+github.com/darkside1809/bookings/internal/render/render.go:88.23,90.18 2 1
+github.com/darkside1809/bookings/internal/render/render.go:90.18,92.5 1 0

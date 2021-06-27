@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net"
@@ -12,47 +13,27 @@ import (
 
 	"github.com/darkside1809/bookings/internal/config"
 	"github.com/darkside1809/bookings/internal/handlers"
+	"github.com/darkside1809/bookings/internal/models"
 	"github.com/darkside1809/bookings/internal/render"
 )
 
 // App holds AppConfig structure
 var app config.AppConfig
+
 // Session holds pointer to SessionManager structure from external package
 var session *scs.SessionManager
 
 // Main function starts listening a server at host, port
 func main() {
-	// Change this to true when app is in production
-	// But in the development mode we set it to false 
-	app.InProduction = false
-
-	session = scs.New()
-	session.Lifetime = 24 * time.Hour
-	session.Cookie.Persist = true
-	session.Cookie.SameSite = http.SameSiteLaxMode
-	session.Cookie.Secure = app.InProduction 
-
-	app.Session = session
-
-	tc, err := render.CreateTemplateCache()
+	err := execute()
 	if err != nil {
-		log.Print(err)
-		return
+		log.Fatal(err)
 	}
-
-	app.TemplateCache = tc
-	app.UseCache = false
-
-	repo := handlers.NewRepo(&app)
-	handlers.NewHandlers(repo)
-
-	render.NewTemplates(&app)
-
 	host := "0.0.0.0"
 	port := "9999"
 
-	srv := &http.Server {
-		Addr: net.JoinHostPort(host, port),
+	srv := &http.Server{
+		Addr:    net.JoinHostPort(host, port),
 		Handler: routes(&app),
 	}
 
@@ -63,3 +44,34 @@ func main() {
 	}
 }
 
+func execute() error {
+	gob.Register(models.Reservation{})
+
+	// Change this to true when app is in production
+	// But in the development mode we set it to false
+	app.InProduction = false
+
+	session = scs.New()
+	session.Lifetime = 24 * time.Hour
+	session.Cookie.Persist = true
+	session.Cookie.SameSite = http.SameSiteLaxMode
+	session.Cookie.Secure = app.InProduction
+
+	app.Session = session
+
+	tc, err := render.CreateTemplateCache()
+	if err != nil {
+		log.Fatal("Can't create template cache")
+		return err
+	}
+
+	app.TemplateCache = tc
+	app.UseCache = false
+
+	repo := handlers.NewRepo(&app)
+	handlers.NewHandlers(repo)
+
+	render.NewTemplates(&app)
+
+	return nil
+}
