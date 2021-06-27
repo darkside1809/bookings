@@ -6,6 +6,7 @@ import (
 	"os"
 	"testing"
 	"time"
+	"log"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/darkside1809/bookings/internal/config"
@@ -21,6 +22,12 @@ func TestMain(m *testing.M) {
 	// Change this to true when app is in production
 	// But in the development mode we set it to false
 	testApp.InProduction = false
+
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	testApp.InfoLog = infoLog
+
+	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	testApp.ErrorLog = errorLog
 
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
@@ -46,7 +53,7 @@ func getSession() (*http.Request, error) {
 	return r, nil
 }
 
-// Implement ResponseWriter interface for RenderTemplate tests
+// Implementing ResponseWriter interface for RenderTemplate tests
 type writer struct{}
 
 func (w *writer) Header() (h http.Header) {

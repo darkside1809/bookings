@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"time"
+	"os"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/darkside1809/bookings/internal/config"
@@ -29,6 +30,12 @@ func getRoutes() http.Handler {
 	// Change this to true when app is in production
 	// But in the development mode we set it to false
 	app.InProduction = false
+
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
 
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour

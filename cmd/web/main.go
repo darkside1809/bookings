@@ -13,6 +13,7 @@ import (
 
 	"github.com/darkside1809/bookings/internal/config"
 	"github.com/darkside1809/bookings/internal/handlers"
+	"github.com/darkside1809/bookings/internal/helpers"
 	"github.com/darkside1809/bookings/internal/models"
 	"github.com/darkside1809/bookings/internal/render"
 )
@@ -20,6 +21,9 @@ import (
 // App holds AppConfig structure
 var app config.AppConfig
 
+// Info and errors handling
+var infoLog  *log.Logger
+var errorLog *log.Logger
 // Session holds pointer to SessionManager structure from external package
 var session *scs.SessionManager
 
@@ -51,6 +55,12 @@ func execute() error {
 	// But in the development mode we set it to false
 	app.InProduction = false
 
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
+
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true
@@ -72,6 +82,7 @@ func execute() error {
 	handlers.NewHandlers(repo)
 
 	render.NewTemplates(&app)
+	helpers.NewHelpers(&app)
 
 	return nil
 }
