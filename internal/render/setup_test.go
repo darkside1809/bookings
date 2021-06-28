@@ -2,11 +2,11 @@ package render
 
 import (
 	"encoding/gob"
+	"log"
 	"net/http"
 	"os"
 	"testing"
 	"time"
-	"log"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/darkside1809/bookings/internal/config"

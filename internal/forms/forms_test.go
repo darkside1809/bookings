@@ -49,7 +49,7 @@ func TestForm_Has(t *testing.T) {
 	postedData := url.Values{}
 	postedData.Add("a", "a")
 	form = New(postedData)
-	
+
 	has = form.Has("a")
 	if !has {
 		t.Error("show form doesn't have field when it should")
@@ -92,7 +92,7 @@ func TestForm_MinLength(t *testing.T) {
 	}
 }
 func TestForm_CheckEmail(t *testing.T) {
-	postedValues := url.Values{}	
+	postedValues := url.Values{}
 	form := New(postedValues)
 
 	form.CheckEmail("x")
@@ -106,7 +106,7 @@ func TestForm_CheckEmail(t *testing.T) {
 	form.CheckEmail("email")
 	if !form.Valid() {
 		t.Error("got an invalid email when should not have")
-	}	
+	}
 
 	postedValues = url.Values{}
 	postedValues.Add("email", "x")
@@ -115,6 +115,5 @@ func TestForm_CheckEmail(t *testing.T) {
 	form.CheckEmail("email")
 	if form.Valid() {
 		t.Error("got valid for invalid email address")
-	}	
+	}
 }
-
