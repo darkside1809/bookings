@@ -34,18 +34,18 @@ func TestRenderTemplate(t *testing.T) {
 	}
 	var ww writer
 
-	err = RenderTemplate(&ww, r, "home.page.html", &models.TemplateData{})
+	err = Template(&ww, r, "home.page.html", &models.TemplateData{})
 	if err != nil {
 		t.Error("error writing template to browser")
 	}
-	err = RenderTemplate(&ww, r, "non-existing.html", &models.TemplateData{})
+	err = Template(&ww, r, "non-existing.html", &models.TemplateData{})
 	if err == nil {
 		t.Error("rendered template that doesn't exist")
 	}
 }
 
 func TestNewTemplate(t *testing.T) {
-	NewTemplates(app)
+	NewRenderer(app)
 }
 
 func TestCreateTemplateCache(t *testing.T) {

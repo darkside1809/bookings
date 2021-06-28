@@ -12,6 +12,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 
 	"github.com/darkside1809/bookings/internal/config"
+	"github.com/darkside1809/bookings/internal/driver"
 	"github.com/darkside1809/bookings/internal/handlers"
 	"github.com/darkside1809/bookings/internal/helpers"
 	"github.com/darkside1809/bookings/internal/models"
@@ -22,17 +23,19 @@ import (
 var app config.AppConfig
 
 // Info and errors handling
-var infoLog  *log.Logger
+var infoLog *log.Logger
 var errorLog *log.Logger
+
 // Session holds pointer to SessionManager structure from external package
 var session *scs.SessionManager
 
 // Main function starts listening a server at host, port
 func main() {
-	err := execute()
+	db, err := execute()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.SQL.Close()
 	host := "0.0.0.0"
 	port := "9999"
 
@@ -48,8 +51,11 @@ func main() {
 	}
 }
 
-func execute() error {
+func execute() (*driver.DB, error) {
 	gob.Register(models.Reservation{})
+	gob.Register(models.User{})
+	gob.Register(models.Room{})
+	gob.Register(models.Restriction{})
 
 	// Change this to true when app is in production
 	// But in the development mode we set it to false
@@ -69,20 +75,27 @@ func execute() error {
 
 	app.Session = session
 
+	// Connect to database
+	log.Println("Connecting to database...")
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=bookings user=postgres password=nekruz1809")
+	if err != nil {
+		log.Fatal("Cannot connect to database!")
+	}
+
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("Can't create template cache")
-		return err
+		return nil, err
 	}
 
 	app.TemplateCache = tc
 	app.UseCache = false
 
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 
-	render.NewTemplates(&app)
+	render.NewRenderer(&app)
 	helpers.NewHelpers(&app)
 
-	return nil
+	return db, nil
 }

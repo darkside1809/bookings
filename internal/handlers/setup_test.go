@@ -6,9 +6,9 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"time"
-	"os"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/darkside1809/bookings/internal/config"
@@ -55,7 +55,7 @@ func getRoutes() http.Handler {
 
 	repo := NewRepo(&app)
 	NewHandlers(repo)
-	render.NewTemplates(&app)
+	render.NewRenderer(&app)
 
 	mux := chi.NewRouter()
 

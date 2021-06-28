@@ -8,7 +8,6 @@ import (
 	"github.com/darkside1809/bookings/internal/config"
 )
 
-
 var app *config.AppConfig
 
 // NewHelpers sets up app config for helpers

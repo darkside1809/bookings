@@ -5,7 +5,7 @@ import (
 )
 
 func TestExecute(t *testing.T) {
-	err := execute()
+	_, err := execute()
 	if err != nil {
 		t.Error("Failed execute")
 	}
