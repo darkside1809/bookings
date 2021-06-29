@@ -36,7 +36,7 @@ type Reservation struct {
 	Phone					string
 	StartDate			time.Time
 	EndDate				time.Time
-	RoomId				int
+	RoomID				int
 	Created				time.Time
 	Updated 				time.Time
 	Room 					Room
@@ -46,7 +46,7 @@ type RoomRestriction struct {
 	ID 					int
 	StartDate			time.Time
 	EndDate				time.Time
-	RoomId				int
+	RoomID				int
 	ReservationID		int
 	RestrictionID		int
 	Created				time.Time
