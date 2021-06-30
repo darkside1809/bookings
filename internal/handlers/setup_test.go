@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/gob"
 	"fmt"
 	"html/template"
@@ -8,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"testing"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
@@ -24,7 +26,7 @@ var session *scs.SessionManager
 var pathToTemplates = "./../../templates"
 var functions = template.FuncMap{}
 
-func getRoutes() http.Handler {
+func TestMain(m *testing.M) {
 	gob.Register(models.Reservation{})
 
 	// Change this to true when app is in production
@@ -45,6 +47,12 @@ func getRoutes() http.Handler {
 
 	app.Session = session
 
+	mailChan := make(chan models.MailData)
+	app.MailChan = mailChan
+	defer close(mailChan)
+
+	listenForMail()
+
 	tc, err := CreateTestTemplateCache()
 	if err != nil {
 		log.Fatal("Can't create template cache")
@@ -53,10 +61,22 @@ func getRoutes() http.Handler {
 	app.TemplateCache = tc
 	app.UseCache = true
 
-	repo := NewRepo(&app)
+	repo := NewTestRepo(&app)
 	NewHandlers(repo)
 	render.NewRenderer(&app)
 
+	os.Exit(m.Run())
+}
+
+func listenForMail() {
+	go func() {
+		for {
+			_ = <- app.MailChan
+		}
+	}()
+}
+
+func getRoutes() http.Handler {
 	mux := chi.NewRouter()
 
 	mux.Use(middleware.Recoverer)
@@ -83,6 +103,7 @@ func getRoutes() http.Handler {
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
 	return mux
 }
+
 func NoSurf(next http.Handler) http.Handler {
 	csrfHandler := nosurf.New(next)
 
@@ -94,9 +115,11 @@ func NoSurf(next http.Handler) http.Handler {
 	})
 	return csrfHandler
 }
+
 func SessionLoad(next http.Handler) http.Handler {
 	return session.LoadAndSave(next)
 }
+
 func CreateTestTemplateCache() (map[string]*template.Template, error) {
 	myCache := map[string]*template.Template{}
 
@@ -126,4 +149,12 @@ func CreateTestTemplateCache() (map[string]*template.Template, error) {
 		myCache[name] = ts
 	}
 	return myCache, nil
+}
+
+func getCtx(r *http.Request) context.Context {
+	ctx, err := session.Load(r.Context(), r.Header.Get("X-Session"))
+	if err != nil {
+		log.Println(err)
+	}
+	return ctx
 }
