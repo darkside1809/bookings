@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/alexedwards/scs/v2"
+	"github.com/darkside1809/bookings/internal/models"
 )
 
 // AppConfig holds the application config
@@ -15,4 +16,5 @@ type AppConfig struct {
 	InfoLog       *log.Logger
 	InProduction  bool
 	Session       *scs.SessionManager
+	MailChan		  chan models.MailData
 }

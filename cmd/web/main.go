@@ -36,9 +36,13 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.SQL.Close()
+
+	defer close(app.MailChan)
+	fmt.Println("Starting mail listener...")
+	listenForMail()
+
 	host := "0.0.0.0"
 	port := "9999"
-
 	srv := &http.Server{
 		Addr:    net.JoinHostPort(host, port),
 		Handler: routes(&app),
@@ -56,6 +60,9 @@ func execute() (*driver.DB, error) {
 	gob.Register(models.User{})
 	gob.Register(models.Room{})
 	gob.Register(models.Restriction{})
+
+	mailChan := make(chan models.MailData)
+	app.MailChan = mailChan
 
 	// Change this to true when app is in production
 	// But in the development mode we set it to false
