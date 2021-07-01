@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	// built in Golang packages
 	"context"
 	"encoding/gob"
 	"fmt"
@@ -11,14 +12,15 @@ import (
 	"path/filepath"
 	"testing"
 	"time"
-
+	// External dependencies
 	"github.com/alexedwards/scs/v2"
-	"github.com/darkside1809/bookings/internal/config"
-	"github.com/darkside1809/bookings/internal/models"
-	"github.com/darkside1809/bookings/internal/render"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/justinas/nosurf"
+	// My own packages
+	"github.com/darkside1809/bookings/internal/config"
+	"github.com/darkside1809/bookings/internal/models"
+	"github.com/darkside1809/bookings/internal/render"
 )
 
 var app config.AppConfig

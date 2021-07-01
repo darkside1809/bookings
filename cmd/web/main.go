@@ -1,6 +1,7 @@
 package main
 
 import (
+	// built in Golang packages
 	"encoding/gob"
 	"fmt"
 	"log"
@@ -8,9 +9,9 @@ import (
 	"net/http"
 	"os"
 	"time"
-
+	// External packages/dependencies
 	"github.com/alexedwards/scs/v2"
-
+	// My own packages
 	"github.com/darkside1809/bookings/internal/config"
 	"github.com/darkside1809/bookings/internal/driver"
 	"github.com/darkside1809/bookings/internal/handlers"

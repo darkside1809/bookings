@@ -1,10 +1,11 @@
 package forms
 
 import (
+	// built in Golang packages
 	"fmt"
 	"net/url"
 	"strings"
-
+	// External packages/dependencies
 	"github.com/asaskevich/govalidator"
 )
 
@@ -19,7 +20,7 @@ func (f *Form) Valid() bool {
 	return len(f.Errors) == 0
 }
 
-// New initialize a form struct
+// New is a constructor for Form struct
 func New(data url.Values) *Form {
 	return &Form{
 		data,
@@ -27,7 +28,7 @@ func New(data url.Values) *Form {
 	}
 }
 
-// Required iterate through fields and check if a definite filed is empty
+// Required iterates through fields and checks is a definite filed empty or not
 func (f *Form) Required(fields ...string) {
 	for _, field := range fields {
 		val := f.Get(field)
@@ -37,7 +38,7 @@ func (f *Form) Required(fields ...string) {
 	}
 }
 
-// Has checks if form field is in post and not empty
+// Has checks is form field in post and not empty
 func (f *Form) Has(field string) bool {
 	x := f.Get(field)
 	if x == "" {
@@ -47,7 +48,7 @@ func (f *Form) Has(field string) bool {
 	return true
 }
 
-// MinLength checks for sttring minimum length
+// MinLength checks for sttring minimum length of user's credentials
 func (f *Form) MinLength(field string, length int) bool {
 	x := f.Get(field)
 	if len(x) < length {
@@ -57,7 +58,7 @@ func (f *Form) MinLength(field string, length int) bool {
 	return true
 }
 
-//  CheckEmail checks for valid email address
+//  CheckEmail checks for valid email address entered by user
 func (f *Form) CheckEmail(field string) {
 	if !govalidator.IsEmail(f.Get(field)) {
 		f.Errors.Add(field, "Ivalid email address")

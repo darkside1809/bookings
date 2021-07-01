@@ -1,30 +1,38 @@
 package render
 
 import (
+	// built in Golang packages
 	"bytes"
 	"errors"
 	"fmt"
-
-	//"errors"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
+	"time"
 
+	// External packages/dependencies
+	"github.com/justinas/nosurf"
+	// My own packages
 	"github.com/darkside1809/bookings/internal/config"
 	"github.com/darkside1809/bookings/internal/models"
-	"github.com/justinas/nosurf"
 )
 
 // Functions variable holds whole functionality of our template (html data)
-var functions = template.FuncMap{}
-
+var functions = template.FuncMap{
+	"humanDate": HumanDate,
+}
+// app is a pointer/entry point to configuration of app
 var app *config.AppConfig
 var pathToTemplates = "./templates"
 
 // NewRenderer create new template for handlers
 func NewRenderer(a *config.AppConfig) {
 	app = a
+}
+// HumanDate returns formated time YYYY-MM-DD
+func HumanDate(t time.Time) string {
+	return t.Format("2006-01-02")
 }
 
 // AddDefaultData set and return default struct of data
@@ -33,6 +41,10 @@ func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateDa
 	td.Error = app.Session.PopString(r.Context(), "error")
 	td.Warning = app.Session.PopString(r.Context(), "warning")
 	td.CSRFToken = nosurf.Token(r)
+	if app.Session.Exists(r.Context(), "user_id") {
+		td.IsAuthenticated = 1
+	}
+
 	return td
 }
 

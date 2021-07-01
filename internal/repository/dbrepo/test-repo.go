@@ -43,3 +43,41 @@ func (p *testDBRepo) GetRoomByID(id int) (models.Room, error) {
 
 	return room, nil
 }
+
+func (p *testDBRepo) GetUserByID(id int) (models.User, error) {
+	var u models.User
+	return u, nil
+}
+
+func (p *testDBRepo) UpdateUser(u models.User) error {
+	return nil
+}
+func (p *testDBRepo) Authenticate(email string, password string) (int, string, error) {
+	return 1, "", nil
+}
+
+func (p *testDBRepo) AllReservations() ([]models.Reservation, error) {
+	var reservations []models.Reservation
+
+	return reservations, nil
+}
+func (p *testDBRepo) AllNewReservations() ([]models.Reservation, error) {
+	var reservations []models.Reservation
+
+	return reservations, nil
+}
+func (p *testDBRepo) GetReservationByID(id int) (models.Reservation, error) {
+	var res models.Reservation
+
+	return res, nil
+}
+func (p *testDBRepo) UpdateReservation(r models.Reservation) error {
+	return nil
+}
+func (p *testDBRepo) DeleteReservationByID(id int) error {
+	return nil
+}
+func (p *testDBRepo) UpdateProcessedForReservation(id int, processed int) error {
+	return nil
+} 
+

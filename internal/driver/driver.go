@@ -1,9 +1,10 @@
 package driver
 
 import (
+	// built in Golang packages
 	"time"
 	"database/sql"
-
+	// External packages/dependencies
 	_ "github.com/jackc/pgconn"
 	_ "github.com/jackc/pgx/v4"
 	_ "github.com/jackc/pgx/v4/stdlib"
@@ -15,7 +16,6 @@ type DB struct {
 }
 
 var conn = &DB{}
-
 const (
 	maxOpenDBConn = 10
 	maxIdleDBConn = 5
@@ -49,7 +49,7 @@ func testDB(d *sql.DB) error {
 	return nil
 }
 
-// NewDatabase creates a new database to our application
+// NewDatabase creates a new database to application
 func NewDatabase(dsn string) (*sql.DB, error) {
 	db, err := sql.Open("pgx", dsn)
 	if err != nil {

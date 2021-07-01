@@ -1,5 +1,6 @@
 package forms
 
+// errors hold a map for form error handling
 type errors map[string][]string
 
 // Add adds an error message for a given form field
