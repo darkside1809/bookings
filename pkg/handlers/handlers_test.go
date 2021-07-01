@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/darkside1809/bookings/internal/models"
+	"github.com/darkside1809/bookings/pkg/models"
 )
 
 type postData struct {

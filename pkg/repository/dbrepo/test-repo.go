@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/darkside1809/bookings/internal/models"
+	"github.com/darkside1809/bookings/pkg/models"
 )
 
 func(p *testDBRepo) AllUsers() bool {

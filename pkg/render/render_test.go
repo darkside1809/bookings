@@ -3,7 +3,7 @@ package render
 import (
 	"testing"
 
-	"github.com/darkside1809/bookings/internal/models"
+	"github.com/darkside1809/bookings/pkg/models"
 )
 
 func TestAddDefaultData(t *testing.T) {

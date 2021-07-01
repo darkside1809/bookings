@@ -8,7 +8,7 @@ import (
 	// External packages/dependencies
 	"golang.org/x/crypto/bcrypt"
 	// My own packages
-	"github.com/darkside1809/bookings/internal/models"
+	"github.com/darkside1809/bookings/pkg/models"
 )
 
 // AllUsers 

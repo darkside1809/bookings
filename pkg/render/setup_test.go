@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/darkside1809/bookings/internal/config"
-	"github.com/darkside1809/bookings/internal/models"
+	"github.com/darkside1809/bookings/pkg/config"
+	"github.com/darkside1809/bookings/pkg/models"
 )
 
 var session *scs.SessionManager

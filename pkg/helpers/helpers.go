@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"runtime/debug"
 	// My own packages
-	"github.com/darkside1809/bookings/internal/config"
+	"github.com/darkside1809/bookings/pkg/config"
 )
 
 // app is a pointer/entry point to configuration of app

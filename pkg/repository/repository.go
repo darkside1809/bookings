@@ -4,7 +4,7 @@ import (
 	// built in Golang packages
 	"time"
 	// My own packages
-	"github.com/darkside1809/bookings/internal/models"
+	"github.com/darkside1809/bookings/pkg/models"
 )
 // DatabaseRepo is an interface that must be implemented by postgresDBRepo
 type DatabaseRepo interface {

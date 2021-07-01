@@ -6,7 +6,7 @@ import (
 	// External packages/dependencies
 	"github.com/justinas/nosurf"
 	// My own packages
-	"github.com/darkside1809/bookings/internal/helpers"
+	"github.com/darkside1809/bookings/pkg/helpers"
 )
 
 // NoSurf adds CSRF protection to all POST requests

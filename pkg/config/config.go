@@ -7,7 +7,7 @@ import (
 	// External dependencies
 	"github.com/alexedwards/scs/v2"
 	// My own packages
-	"github.com/darkside1809/bookings/internal/models"
+	"github.com/darkside1809/bookings/pkg/models"
 )
 
 // AppConfig holds the application configurations
