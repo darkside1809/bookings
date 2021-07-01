@@ -3,9 +3,9 @@
 {{define "content"}}
 <div class="container">
    <div class="row">
-      <div class="col">
+      <div class="col-md-8 offset-2">
 
-         <h1>Login</h1>
+         <h1 class="mt-4">Login</h1>
          <form method="POST" action="/user/login" novalidate>
             <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
             <!-- start email section -->
@@ -30,7 +30,7 @@
             </div>
             <!-- end password section -->
             <hr>
-            <input type="submit" class="btn btn-primary" value="Submit">
+            <input type="submit" class="btn btn-primary mb-4" value="Submit">
          </form>
       </div>
    </div>

@@ -1,3 +1,7 @@
+.navbar-brand {
+   font-size: 1.6rem;
+   font-family: 'Krona One', sans-serif;
+}
 .room-image {
    max-width: 50%;
 }
@@ -6,3 +10,10 @@
    z-index: 10000;
 }
 
+.my-footer {
+   padding: 1em;
+   color: #fff;
+   font-style: 80%;
+   height: 9em;
+   background: rgb(51, 80, 160);
+}
