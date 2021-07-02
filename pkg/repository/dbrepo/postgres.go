@@ -11,10 +11,41 @@ import (
 	"github.com/darkside1809/bookings/pkg/models"
 )
 
-// AllUsers 
-func(p *postgresDBRepo) AllUsers() bool {
+// TODO
+func(p *postgresDBRepo) GetAllUsers() bool {
 	return true
 }
+
+// RegisterUser a user in the system
+func (p *postgresDBRepo) RegisterUser(u models.User) (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
+	defer cancel()
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return 0, err
+	}
+
+	var id int
+	query := `INSERT INTO users (first_name, last_name, email, password, created_at, updated_at)
+					VALUES($1, $2, $3, $4, $5, $6) RETURNING id`
+
+	err = p.DB.QueryRowContext(ctx, query,
+					u.FirstName,
+					u.LastName,
+					u.Email,
+					hash,
+					time.Now(),
+					time.Now(),
+	).Scan(&id)
+	
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
+} 
+
 // InsertReservation inserts a reservations into the database
 func(p *postgresDBRepo) InsertReservation(res models.Reservation) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
@@ -46,6 +77,7 @@ func(p *postgresDBRepo) InsertReservation(res models.Reservation) (int, error) {
 
 	return newID, nil
 }
+
 // InsertRoomRestriction inserts a room restrictions into the database
 func(p *postgresDBRepo) InsertRoomRestriction(res models.RoomRestriction) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
@@ -69,6 +101,7 @@ func(p *postgresDBRepo) InsertRoomRestriction(res models.RoomRestriction) error 
 	}
 	return nil
 }
+
 // SearchAvailabilityByDatesByRoomID return true if availability exists for roomID, 
 // and false if no abalability exists
 func(p *postgresDBRepo) SearchAvailabilityByDatesByRoomID(start time.Time, end time.Time, roomID int) (bool, error){
@@ -91,6 +124,7 @@ func(p *postgresDBRepo) SearchAvailabilityByDatesByRoomID(start time.Time, end t
 
 	return false, nil
 }
+
 // SearchAvailabilityForAllRooms returns a slice of available rooms, if any, for given date range
 func (p *postgresDBRepo) SearchAvailabilityForAllRooms(start time.Time, end time.Time) ([]models.Room, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
@@ -124,6 +158,7 @@ func (p *postgresDBRepo) SearchAvailabilityForAllRooms(start time.Time, end time
 
 	return rooms, nil
 }
+
 // GetRoomByID gets a room by id
 func (p *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
@@ -146,6 +181,7 @@ func (p *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 	}
 	return room, nil
 }
+
 // GetUserByID returns a user by id
 func (p *postgresDBRepo) GetUserByID(id int) (models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
@@ -173,6 +209,7 @@ func (p *postgresDBRepo) GetUserByID(id int) (models.User, error) {
 
 	return u, nil
 }
+
 // UpdateUser updates a user in the database by provided data
 func (p *postgresDBRepo) UpdateUser(u models.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
@@ -193,6 +230,7 @@ func (p *postgresDBRepo) UpdateUser(u models.User) error {
 
 	return nil
 }
+
 // Authenticate authenticates a user, if a user exists in database
 func (p *postgresDBRepo) Authenticate(email string, password string) (int, string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
@@ -216,8 +254,9 @@ func (p *postgresDBRepo) Authenticate(email string, password string) (int, strin
 	}
 	return id, hash , nil
 }
+
 // AllReservations returns a slice of all reservations
-func (p *postgresDBRepo) AllReservations() ([]models.Reservation, error) {
+func (p *postgresDBRepo) GetAllReservations() ([]models.Reservation, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
 	defer cancel()
 
@@ -264,8 +303,9 @@ func (p *postgresDBRepo) AllReservations() ([]models.Reservation, error) {
 
 	return reservations, nil
 }
+
 // AllNewReservations returns a slice of all reservations
-func (p *postgresDBRepo) AllNewReservations() ([]models.Reservation, error) {
+func (p *postgresDBRepo) GetAllNewReservations() ([]models.Reservation, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
 	defer cancel()
 
@@ -312,6 +352,7 @@ func (p *postgresDBRepo) AllNewReservations() ([]models.Reservation, error) {
 
 	return reservations, nil
 }
+
 // GetReservationByID returns one reservation by ID
 func (p *postgresDBRepo) GetReservationByID(id int) (models.Reservation, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
@@ -347,6 +388,7 @@ func (p *postgresDBRepo) GetReservationByID(id int) (models.Reservation, error) 
 	}
 	return res, nil
 }
+
 // UpdateReservation updates resertion in the database
 func (p *postgresDBRepo) UpdateReservation(r models.Reservation) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
@@ -370,6 +412,7 @@ func (p *postgresDBRepo) UpdateReservation(r models.Reservation) error {
 
 	return nil
 }
+
 // DeleteReservationByID deletes one reservation by id
 func (p *postgresDBRepo) DeleteReservationByID(id int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
@@ -384,6 +427,7 @@ func (p *postgresDBRepo) DeleteReservationByID(id int) error {
 
 	return nil
 }
+
 // UpdateProcessedForReservation updates processed for a reservation by id
 func (p *postgresDBRepo) UpdateProcessedForReservation(id int, processed int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)

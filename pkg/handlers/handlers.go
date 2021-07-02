@@ -428,9 +428,10 @@ func (m *Repository) ShowLogin(w http.ResponseWriter, r *http.Request) {
 // PostShowLogin handles logging the user in
 func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
 	_ = m.App.Session.RenewToken(r.Context())
+
 	err := r.ParseForm()
 	if err != nil {
-		log.Print(err)
+		log.Println(err)
 	}
 
 	email := r.Form.Get("email")
@@ -449,8 +450,7 @@ func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
 
 	id, _, err := m.DB.Authenticate(email, password)
 	if err != nil {
-		log.Print(err)
-		m.App.Session.Put(r.Context(), "error", "invalid login credentials")
+		m.App.Session.Put(r.Context(), "error", "Invalid login credentials")
 		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 		return
 	}
@@ -465,8 +465,66 @@ func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	_ = m.App.Session.Destroy(r.Context())
 	_ = m.App.Session.RenewToken(r.Context())
 
- 	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 }
+
+
+
+// ShowSignUp renders to client signup.page.html
+func (m *Repository) ShowSignUp(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "signup.page.html", &models.TemplateData{
+		Form: forms.New(nil),
+	})
+}
+
+// PostShowSignUp handles signing up a user 
+func (m *Repository) PostShowSignUp(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse form!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+
+	user := models.User {
+		FirstName: r.Form.Get("first_name"),
+		LastName:  r.Form.Get("last_name"),
+		Email: 	  r.Form.Get("email"),
+		Password:  r.Form.Get("password"),
+	}
+
+	form := forms.New(r.PostForm)
+	form.Required("first_name", "last_name", "email", "password")
+	form.MinLength("first_name", 3)
+	form.CheckEmail("email")
+
+	// all fine
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["user"] = user
+		//http.Error(w, "Invalid data was inserted!", http.StatusSeeOther)
+
+		render.Template(w, r, "signup.page.html", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+		return
+	}
+
+	id, err := m.DB.RegisterUser(user)
+	if err != nil {
+		helpers.ServerError(w, err)
+		http.Redirect(w, r, "/user/signup", http.StatusSeeOther)
+		return
+	}
+
+	m.App.Session.Put(r.Context(), "user_id", id)
+	m.App.Session.Put(r.Context(), "flash", "Sighned ip successfully")
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+
 
 // AdminDashboard
 func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
@@ -475,7 +533,7 @@ func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 
 // AdminNewReservations shows all new reservation in admin tool
 func (m *Repository) AdminNewReservations(w http.ResponseWriter, r *http.Request) {
-	reservations, err := m.DB.AllNewReservations()
+	reservations, err := m.DB.GetAllNewReservations()
 	if err != nil {
 		helpers.ServerError(w, err)
 	}
@@ -490,7 +548,7 @@ func (m *Repository) AdminNewReservations(w http.ResponseWriter, r *http.Request
 
 // AdminAllReservations renders admin-all-reservations.page.html
 func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request) {
-	reservations, err := m.DB.AllReservations()
+	reservations, err := m.DB.GetAllReservations()
 	if err != nil {
 		helpers.ServerError(w, err)
 	}
@@ -610,6 +668,7 @@ func (m *Repository) AdminProcessReservation(w http.ResponseWriter, r *http.Requ
 	m.App.Session.Put(r.Context(), "flash", "Reservation marked as processed")
 	http.Redirect(w, r, fmt.Sprintf("/admin/reservations-%s", src), http.StatusSeeOther)
 }
+
 
 // AdminDeleteReservation deletes a reservation
 func (m *Repository) AdminDeleteReservation(w http.ResponseWriter, r *http.Request) {

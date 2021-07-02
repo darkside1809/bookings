@@ -8,7 +8,7 @@ import (
 )
 // DatabaseRepo is an interface that must be implemented by postgresDBRepo
 type DatabaseRepo interface {
-	AllUsers() bool
+	GetAllUsers() bool
 	InsertReservation(res models.Reservation) (int, error)
 	InsertRoomRestriction(res models.RoomRestriction) error
 
@@ -19,9 +19,10 @@ type DatabaseRepo interface {
 	GetUserByID(id int) (models.User, error)
 	UpdateUser(u models.User) error
 	Authenticate(email string, password string) (int, string, error)
+	RegisterUser(u models.User) (int, error)
 
-	AllReservations() ([]models.Reservation, error)
-	AllNewReservations() ([]models.Reservation, error)
+	GetAllReservations() ([]models.Reservation, error)
+	GetAllNewReservations() ([]models.Reservation, error)
 	GetReservationByID(id int) (models.Reservation, error)
 	UpdateReservation(r models.Reservation) error
 	DeleteReservationByID(id int) error
