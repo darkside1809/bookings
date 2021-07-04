@@ -1,6 +1,7 @@
 package main
 
 import (
+	// built in Golang packages
 	"encoding/gob"
 	"fmt"
 	"log"
@@ -8,15 +9,15 @@ import (
 	"net/http"
 	"os"
 	"time"
-
+	// External packages/dependencies
 	"github.com/alexedwards/scs/v2"
-
-	"github.com/darkside1809/bookings/internal/config"
-	"github.com/darkside1809/bookings/internal/driver"
-	"github.com/darkside1809/bookings/internal/handlers"
-	"github.com/darkside1809/bookings/internal/helpers"
-	"github.com/darkside1809/bookings/internal/models"
-	"github.com/darkside1809/bookings/internal/render"
+	// My own packages
+	"github.com/darkside1809/bookings/pkg/config"
+	"github.com/darkside1809/bookings/pkg/driver"
+	"github.com/darkside1809/bookings/pkg/handlers"
+	"github.com/darkside1809/bookings/pkg/helpers"
+	"github.com/darkside1809/bookings/pkg/models"
+	"github.com/darkside1809/bookings/pkg/render"
 )
 
 // App holds AppConfig structure
@@ -48,7 +49,7 @@ func main() {
 		Handler: routes(&app),
 	}
 
-	fmt.Printf("Server start listening at %s\n", srv.Addr)
+	fmt.Printf("Server start listening at %s ;) Let's GOOO!\n", srv.Addr,)
 	err = srv.ListenAndServe()
 	if err != nil {
 		os.Exit(1)
@@ -88,13 +89,13 @@ func execute() (*driver.DB, error) {
 	if err != nil {
 		log.Fatal("Cannot connect to database!")
 	}
-
+	
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("Can't create template cache")
 		return nil, err
 	}
-
+	log.Println("Creating templates...")
 	app.TemplateCache = tc
 	app.UseCache = false
 

@@ -1,0 +1,53 @@
+{{template "admin" .}}
+
+{{define "css"}}
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+{{end}}
+
+{{define "page-title"}}
+   All Users
+{{end}}
+
+{{define "content"}}
+<div class="col-md-12">
+   {{$users := index .Data "users"}}
+
+   <table class="table table-stripped table-hover" id="all-users">
+      <thead>
+         <tr>
+            <th>ID</th>
+            <th>First Name/Last Name</th>
+            <th>Access Level</th>
+            <th>Created at</th>
+            <th>Updated at</th>
+         </tr>
+      </thead>
+      <tbody>
+         {{range $users}}
+         <tr>
+            <td>{{.ID}}</td>
+            <td>
+               <a href="/admin/users/all/{{.ID}}">
+                  {{.FirstName}} {{.LastName}}
+               </a>
+            </td>
+            <td>{{.AccessLevel}}</td>
+            <td>{{humanDate .Created}}</td>
+            <td>{{humanDate .Updated}}</td>
+         </tr>
+         {{end}}
+      </tbody>
+   </table>
+</div>
+{{end}}
+
+{{define "js"}}
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+<script>
+   document.addEventListener("DOMContentLoaded", function () {
+      const dataTable = new simpleDatatables.DataTable("#all-users", {
+         select: 3, sort: "desc",
+      })
+   })
+</script>
+{{end}}

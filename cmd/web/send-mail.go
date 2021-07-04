@@ -1,17 +1,20 @@
 package main
 
 import (
+	// built in Golang packages
 	"fmt"
 	"io/ioutil"
 	"log"
 	"strings"
 	"time"
-
-	"github.com/darkside1809/bookings/internal/models"
+	// External packages/dependencies
 	"github.com/xhit/go-simple-mail/v2"
+	// My own packages
+	"github.com/darkside1809/bookings/pkg/models"
+	
 )
 
-
+// listenForMail creates a goroutine, that wait for sending email from user to user
 func listenForMail() {
 	go func() {
 		for {
@@ -20,7 +23,10 @@ func listenForMail() {
 		}
 	}()
 }
-
+// sendMessage creates new smtp server, 
+// -connect client to server,
+// -read messages from given template/file
+// -send email message from given sender address to the given receiver address
 func sendMessage(m models.MailData) {
 	server := mail.NewSMTPClient()
 	server.Host = "localhost"

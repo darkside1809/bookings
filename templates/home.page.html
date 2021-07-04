@@ -1,56 +1,157 @@
 {{template "base" .}}
 
 {{define "content"}}
-   <div id="main-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-      <div class="carousel-indicators">
-         <button type="button" data-bs-target="#main-carousel" data-bs-slide-to="0" class="active" aria-current="true"
-            aria-label="Slide 1"></button>
-         <button type="button" data-bs-target="#main-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-         <button type="button" data-bs-target="#main-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+<div id="main-carousel" class="carousel slide" data-bs-ride="carousel">
+   <button class="carousel-control-prev" type="button" data-bs-target="#main-carousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+   </button>
+   <button class="carousel-control-next" type="button" data-bs-target="#main-carousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+   </button>
+
+   <div class="carousel-inner" style="min-height: 100vh;">
+      <div class="carousel-item active">
+         <img src="/static/images/roomy-hotel.jpg" class="d-block w-100" alt="woman with laptop"
+            style="filter: brightness(60%);">
+         <div class="carousel-caption d-none d-md-block position-absolute top-50 start-40">
+            <h2>Beautiful views of the mountains and the sea</h2>
+            <h3>Feel absolute freedom in such an open space</h3>
+            </p>
+         </div>
+      </div>
+      <div class="carousel-item">
+         <img src="/static/images/room.jpg" class="d-block w-100" alt="tray" style="filter: brightness(60%);">
+         <div class="carousel-caption d-none d-md-block position-absolute top-50 start-40">
+            <h2>Cozy rooms</h2>
+            <h3>Provide convenient rooms for individuals as well as for family</h3>
+         </div>
       </div>
 
-      <div class="carousel-inner">
-         <div class="carousel-item active">
-            <img src="/static/images/woman-laptop.png" class="d-block w-100" alt="woman with laptop">
-            <div class="carousel-caption d-none d-md-block">
-               <h5>First slide label</h5>
-               <p>Some representative placeholder content for the first slide.</p>
-            </div>
-         </div>
-         <div class="carousel-item">
-            <img src="/static/images/tray.png" class="d-block w-100" alt="tray">
-            <div class="carousel-caption d-none d-md-block">
-               <h5>First slide label</h5>
-               <p>Some representative placeholder content for the first slide.</p>
-            </div>
-         </div>
-         <div class="carousel-item">
-            <img src="/static/images/outside.png" class="d-block w-100" alt="outside picture">
-            <div class="carousel-caption d-none d-md-block">
-               <h5>First slide label</h5>
-               <p>Some representative placeholder content for the first slide.</p>
-            </div>
+      <div class="carousel-item">
+         <img src="/static/images/under.jpg" class="d-block w-100" alt="outside picture"
+            style="filter: brightness(60%);">
+         <div class="carousel-caption d-none d-md-block position-absolute top-50 start-40">
+            <h2>Evening talks with friends or in family circle</h2>
          </div>
       </div>
+      <div class="carousel-item">
+         <img src="/static/images/breakfast.jpg" class="d-block w-100" alt="outside picture"
+            style="filter: brightness(40%);">
+         <div class="carousel-caption d-none d-md-block position-absolute top-50 start-40">
+            <h2>Yummy breakfast you have never taste before</h2>
+            <h3>Absolutely for free</h3>
+         </div>
+      </div>
+      <div class="carousel-item">
+         <img src="/static/images/sea.jpg" class="d-block w-100" alt="outside picture" style="filter: brightness(60%);">
+         <div class="carousel-caption d-none d-md-block position-absolute top-50 start-40">
+            <h2>The whole beach is at your disposal</h2>
+         </div>
+      </div>
+      <div class="carousel-item">
+         <img src="/static/images/reception.jpg" class="d-block w-100" alt="outside picture"
+            style="filter: brightness(60%);">
+         <div class="carousel-caption d-none d-md-block position-absolute top-50 start-40">
+            <h2>Friendly and hospitable receptionists</h2>
+         </div>
+      </div>
+      <div class="carousel-item">
+         <img src="/static/images/game-room.jpg" class="d-block w-100" alt="outside picture"
+            style="filter: brightness(60%);">
+         <div class="carousel-caption d-none d-md-block position-absolute top-50 start-40">
+            <h2>Play games of any genre</h2>
+         </div>
+      </div>
+      <div class="carousel-item">
+         <img src="/static/images/home-cinema.jpg" class="d-block w-100" alt="outside picture"
+            style="filter: brightness(60%);">
+         <div class="carousel-caption d-none d-md-block position-absolute top-50 start-40">
+            <h2>Home theater with sound format at your service</h2>
+         </div>
+      </div>
+
    </div>
+</div>
 
-   <div class="container">
-      <div class="row">
-         <div class="col">
-            <h1 class="text-center mt-4">Welcome to our Hotel</h1>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem possimus, nihil modi nesciunt ad
-               facilis excepturi facere commodi reiciendis eaque ut dolor cum illo provident ex quia atque! Sequi, nihil!.
-               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam sit quasi fuga alias omnis labore nesciunt
-               mollitia molestiae cumque optio adipisci, dolores cupiditate itaque, aut nisi autem nulla fugit ullam. Lorem
-               ipsum, dolor sit amet consectetur adipisicing elit. Veniam, assumenda? Ipsa qui possimus quod vitae
-               consectetur doloribus porro natus facere, neque quaerat nobis iusto amet, delectus nesciunt facilis quidem
-               nihil.</p>
-         </div>
-      </div>
-
+<div class="container"
+   style="max-width: 100%; background: #141E30;  /* fallback for old browsers */
+                                               background: -webkit-linear-gradient(to right, #243B55, #141E30);  /* Chrome 10-25, Safari 5.1-6 */
+                                               background: linear-gradient(to right, #243B55, #141E30); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */color: antiquewhite">
    <div class="row">
-      <div class="col text-center">
-         <a href="/search-availability" class="btn btn-success">Make Reservation Now</a>
+      <div class="col mb-5 pb-5">
+         <h1 class="text-center mt-5">Welcome to <span style="font-family: 'Krona One', sans-serif;">NJM</span> Hotel
+         </h1>
+         <p class="text-center" style="font-size: 1.2rem;">We create an environment of lateral service so that the needs
+            of our guests and each other are met. We value every
+            individual’s contribution and personal growth within the company. We treat everyone with dignity and respect
+            at all
+            times. We do what we say we will do and are honest and fair. We will take an active role in service to our
+            community.</p>
+         <p class="text-center" style="font-size: 1.2rem;">Whether you are travelling for business or pleasure, the
+            luxury hotel services offered by the five star <span style="font-size: 1.6rem;">N</span>ice <span
+               style="font-size: 1.6rem;">J</span>ourney <span style="font-size: 1.6rem;">M</span>an
+            Hotel make it an ideal choice for your stay in Dushanbe, Tajikistan. The hotel’s luxurious surroundings,
+            comfort,
+            thoughtful
+            touches and a personalized service sets it apart from any other hotel, allowing you to feel like being at
+            home from your
+            very first steps into the hotel.
+
+            We are geared towards the fulfillment of the needs of any discerning guest and below you can find an
+            alphabetical
+            overview of the most commonly-used services and facilities offered by our boutique hotel.</p>
       </div>
    </div>
-{{end}}
+
+   <div class="row d-flex justify-content-center" style="color: antiquewhite;">
+      <h1 class="text-center mb-5" style="color: antiquewhite;">Our services</h1>
+      <div class="col-sm-5">
+         <div class="card" style="background: transparent; border: none;">
+            <img src="/static/images/luggage.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+               <h5 class="card-title">Using a luggage locker or a safety deposit box</h5>
+               <p class="card-text">Individually secured container for every guest, so luggage safety won't bother you.
+                  We believe in strengthening our communities one neighborhood at a time, serving our customers as if
+                  they were our
+                  family, and rewarding hard work.</p>
+            </div>
+         </div>
+      </div>
+      <div class="col-sm-5 mb-3">
+         <div class="card" style="background: transparent; border: none;">
+            <img src="/static/images/billiards.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+               <h5 class="card-title">Billiards, gym and playgrounds</h5>
+               <p class="card-text">Have a great time with your friends or family playing games and having rest.</p>
+            </div>
+         </div>
+      </div>
+      <div class="col-sm-5 mb-3">
+         <div class="card" style="background: transparent; border: none;">
+            <img src="/static/images/restaurant.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+               <h5 class="card-title">Getting a booking in a restaurant</h5>
+               <p class="card-text">Confirm a table for your party at a specified time.</p>
+            </div>
+         </div>
+      </div>
+      <div class="col-sm-5 mb-3">
+         <div class="card" style="background: transparent; border: none;">
+            <img src="/static/images/cars.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+               <h5 class="card-title">Car rental</h5>
+               <p class="card-text">Rent a car you like and make your holidays more exciting.</p>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="row" style="padding: 8rem;">
+      <h1 class="text-center mb-3">Let's make a reservation</h1>
+      <div class="col text-center mb-5">
+         <a href="/search-availability" class="btn btn-success" style="font-size: 1.2rem;">Make Reservation Now</a>
+      </div>
+   </div>
+   {{end}}
