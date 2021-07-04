@@ -12,8 +12,108 @@ import (
 )
 
 // TODO
-func(p *postgresDBRepo) GetAllUsers() bool {
-	return true
+func(p *postgresDBRepo) GetAllUsers() ([]models.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
+	defer cancel()
+
+	var users []models.User
+	query := `
+		SELECT id, first_name, last_name, email, access_level, created_at, updated_at FROM users
+		ORDER BY created_at ASC`
+
+	rows, err := p.DB.QueryContext(ctx, query)
+	if err != nil {
+		return users, err
+	}
+	defer rows.Close()
+	
+	for rows.Next() {
+		var u models.User
+		err := rows.Scan(
+			&u.ID,
+			&u.FirstName,
+			&u.LastName,
+			&u.Email,
+			&u.AccessLevel,
+			&u.Created,
+			&u.Updated,
+		)
+		if err != nil {
+			return users, err
+		}
+		users = append(users, u)
+	}
+
+	if err = rows.Err(); err != nil {
+		return users, err
+	}
+
+	return users, nil
+}
+
+// DeleteUserByID deletes one reservation by id
+func (p *postgresDBRepo) DeleteUserByID(id int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
+	defer cancel()
+
+	query := "DELETE FROM users WHERE id = $1"
+
+	_, err := p.DB.ExecContext(ctx, query, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// GetUserByID returns a user by id
+func (p *postgresDBRepo) GetUserByID(id int) (models.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
+	defer cancel()
+
+	query := `SELECT id, first_name, last_name, email, password, access_level, created_at, updated_at
+					FROM users WHERE id = $1`
+
+	row := p.DB.QueryRowContext(ctx, query, id)
+
+	var u models.User
+	err := row.Scan(
+					&u.ID, 
+					&u.FirstName, 
+					&u.LastName, 
+					&u.Email, 
+					&u.Password, 
+					&u.AccessLevel, 
+					&u.Created, 
+					&u.Updated,
+	)
+	if err != nil {
+		return u, err
+	}
+
+	return u, nil
+}
+
+// UpdateUser updates a user in the database by provided data
+func (p *postgresDBRepo) UpdateUser(u models.User) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
+	defer cancel()
+
+	query := `UPDATE users SET first_name = $1, last_name = $2, email = $3, access_level = $4, updated_at = $5
+					WHERE id = $6`
+	_, err := p.DB.ExecContext(ctx, query, 
+					u.FirstName,
+					u.LastName,
+					u.Email,
+					u.AccessLevel,
+					time.Now(),
+					u.ID,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // RegisterUser a user in the system
@@ -180,55 +280,6 @@ func (p *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 		return room, err
 	}
 	return room, nil
-}
-
-// GetUserByID returns a user by id
-func (p *postgresDBRepo) GetUserByID(id int) (models.User, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
-	defer cancel()
-
-	query := `SELECT id, first_name, last_name, email, password, access_level, created_at, updated_at
-					FROM users WHERE id = $1`
-
-	row := p.DB.QueryRowContext(ctx, query, id)
-
-	var u models.User
-	err := row.Scan(
-					&u.ID, 
-					&u.FirstName, 
-					&u.LastName, 
-					&u.Email, 
-					&u.Password, 
-					&u.AccessLevel, 
-					&u.Created, 
-					&u.Updated,
-	)
-	if err != nil {
-		return u, err
-	}
-
-	return u, nil
-}
-
-// UpdateUser updates a user in the database by provided data
-func (p *postgresDBRepo) UpdateUser(u models.User) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
-	defer cancel()
-
-	query := `UPDATE users SET first_name = $1, last_name = $2, email = $3, access_level = $4, updated_at = $5`
-	
-	_, err := p.DB.ExecContext(ctx, query, 
-					u.FirstName,
-					u.LastName,
-					u.Email,
-					u.AccessLevel,
-					time.Now(),
-	)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 // Authenticate authenticates a user, if a user exists in database

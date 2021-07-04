@@ -61,14 +61,15 @@
             <ul class="nav">
                <li class="nav-item">
                   <a class="nav-link" href="/admin/dashboard">
-                     <i class="ti-shield menu-icon"></i>
+                     <i class="ti-mouse menu-icon"></i>
                      <span class="menu-title">Dashboard</span>
                   </a>
                </li>
+               
                <li class="nav-item">
                   <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false"
                      aria-controls="ui-basic">
-                     <i class="ti-palette menu-icon"></i>
+                     <i class="ti-layout-list-post menu-icon"></i>
                      <span class="menu-title">Reservations</span>
                      <i class="menu-arrow"></i>
                   </a>
@@ -81,13 +82,19 @@
                      </ul>
                   </div>
                </li>
+               <!-- start calendar -->
                <li class="nav-item">
                   <a class="nav-link" href="/admin/reservations-calendar">
-                     <i class="ti-layout-list-post menu-icon"></i>
+                     <i class="ti-calendar menu-icon"></i>
                      <span class="menu-title">Reservation Calendar</span>
                   </a>
                </li>
-
+               <!-- end calendar -->
+               <!-- start users section -->
+               
+               <li class="nav-item"><a class="nav-link" href="/admin/users-all"><i class="ti-user menu-icon"></i>
+                     Users</a></li>
+               <!-- end users section -->
             </ul>
          </nav>
          <!-- partial -->
@@ -127,13 +134,8 @@
    </div>
    <!-- container-scroller -->
 
-   <!-- plugins:js -->
+   <!-- plugins js -->
    <script src="/static/admin/vendors/base/vendor.bundle.base.js"></script>
-   <!-- endinject -->
-   <!-- Plugin js for this page-->
-
-   <!-- End plugin js for this page-->
-   <!-- inject:js -->
    <script src="https://unpkg.com/notie"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    <script src="/static/js/app.js"></script>

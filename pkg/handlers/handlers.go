@@ -468,8 +468,6 @@ func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 }
 
-
-
 // ShowSignUp renders to client signup.page.html
 func (m *Repository) ShowSignUp(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "signup.page.html", &models.TemplateData{
@@ -520,11 +518,9 @@ func (m *Repository) PostShowSignUp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	m.App.Session.Put(r.Context(), "user_id", id)
-	m.App.Session.Put(r.Context(), "flash", "Sighned ip successfully")
+	m.App.Session.Put(r.Context(), "flash", "Successfully registered")
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
-
-
 
 // AdminDashboard
 func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
@@ -590,6 +586,7 @@ func (m *Repository) AdminShowReservation(w http.ResponseWriter, r *http.Request
 	})
 }
 
+// AdminPostShowReservation save reservation changes
 func (m *Repository) AdminPostShowReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -669,14 +666,105 @@ func (m *Repository) AdminProcessReservation(w http.ResponseWriter, r *http.Requ
 	http.Redirect(w, r, fmt.Sprintf("/admin/reservations-%s", src), http.StatusSeeOther)
 }
 
-
 // AdminDeleteReservation deletes a reservation
 func (m *Repository) AdminDeleteReservation(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
 	src := chi.URLParam(r, "src")
 
 	_ = m.DB.DeleteReservationByID(id)
-	m.App.Session.Put(r.Context(), "flash", "Reservation marked as processed")
+	m.App.Session.Put(r.Context(), "flash", "Reservation deleted")
 	http.Redirect(w, r, fmt.Sprintf("/admin/reservations-%s", src), http.StatusSeeOther)
+}
+
+// AdminAllUsers show the users in the admin tool
+func (m *Repository) AdminAllUsers(w http.ResponseWriter, r *http.Request) {
+	users, err := m.DB.GetAllUsers()
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	data := make(map[string]interface{})
+	data["users"] = users
+
+	render.Template(w, r, "admin-all-users.page.html", &models.TemplateData{
+		Data: data,
+	})
+}
+
+// AdminShowUsers show the users in the admin tool
+func (m *Repository) AdminShowUsers(w http.ResponseWriter, r *http.Request) {
+	exploded := strings.Split(r.RequestURI, "/")
+	id, err := strconv.Atoi(exploded[4])
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	src := exploded[3]
+	stringMap := make(map[string]string)
+	stringMap["src"] = src
+
+	user, err := m.DB.GetUserByID(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["users"] = user
+
+	render.Template(w, r, "admin-users-show.page.html", &models.TemplateData{
+		StringMap: stringMap,
+		Data: data,
+		Form: forms.New(nil),
+	})
+}
+
+// AdminPostShowUsers save user changes
+func (m *Repository) AdminPostShowUsers(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	
+	exploded := strings.Split(r.RequestURI, "/")
+	id, err := strconv.Atoi(exploded[4])
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	src := exploded[3]
+	stringMap := make(map[string]string)
+	stringMap["src"] = src
+
+	user, err := m.DB.GetUserByID(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	user.FirstName = r.Form.Get("first_name")
+	user.LastName = r.Form.Get("last_name")
+	user.Email = r.Form.Get("email")
+
+	err = m.DB.UpdateUser(user)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	m.App.Session.Put(r.Context(), "flash", "User data changed")
+	http.Redirect(w, r, fmt.Sprintf("/admin/users-%s", src), http.StatusSeeOther)
+}
+
+// AdminDeleteUser delete user from web page
+func (m *Repository) AdminDeleteUser(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
+	src := chi.URLParam(r, "src")
+
+	_ = m.DB.DeleteUserByID(id)
+	m.App.Session.Put(r.Context(), "flash", "User deleted")
+	http.Redirect(w, r, fmt.Sprintf("/admin/users-%s", src), http.StatusSeeOther)
 }
 

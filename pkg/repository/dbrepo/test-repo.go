@@ -7,8 +7,11 @@ import (
 	"github.com/darkside1809/bookings/pkg/models"
 )
 
-func(p *testDBRepo) GetAllUsers() bool {
-	return true
+func(p *testDBRepo) GetAllUsers() (users []models.User, err error) {
+	return users, err
+}
+func(p *testDBRepo) DeleteUserByID(id int) error {
+	return nil
 }
 
 func(p *testDBRepo) InsertReservation(res models.Reservation) (int, error) {
