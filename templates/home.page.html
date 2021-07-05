@@ -1,5 +1,4 @@
 {{template "base" .}}
-
 {{define "content"}}
 <div id="main-carousel" class="carousel slide" data-bs-ride="carousel">
    <button class="carousel-control-prev" type="button" data-bs-target="#main-carousel" data-bs-slide="prev">
@@ -13,7 +12,7 @@
 
    <div class="carousel-inner" style="min-height: 100vh;">
       <div class="carousel-item active">
-         <img src="/static/images/roomy-hotel.jpg" class="d-block w-100" alt="woman with laptop"
+         <img src="/static/images/roomy-hotel.jpg" class="d-block w-100" alt="room"
             style="filter: brightness(60%);">
          <div class="carousel-caption d-none d-md-block position-absolute top-50 start-40">
             <h2>Beautiful views of the mountains and the sea</h2>
@@ -69,16 +68,14 @@
             style="filter: brightness(60%);">
          <div class="carousel-caption d-none d-md-block position-absolute top-50 start-40">
             <h2>Home theater with sound format at your service</h2>
+            <h3>Make yourself at home</h3>
          </div>
       </div>
 
    </div>
 </div>
 
-<div class="container"
-   style="max-width: 100%; background: #141E30;  /* fallback for old browsers */
-                                               background: -webkit-linear-gradient(to right, #243B55, #141E30);  /* Chrome 10-25, Safari 5.1-6 */
-                                               background: linear-gradient(to right, #243B55, #141E30); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */color: antiquewhite">
+<div class="container bg">
    <div class="row">
       <div class="col mb-5 pb-5">
          <h1 class="text-center mt-5">Welcome to <span style="font-family: 'Krona One', sans-serif;">NJM</span> Hotel
@@ -132,7 +129,7 @@
          <div class="card" style="background: transparent; border: none;">
             <img src="/static/images/restaurant.jpg" class="card-img-top" alt="...">
             <div class="card-body">
-               <h5 class="card-title">Getting a booking in a restaurant</h5>
+               <h5 class="card-title">Get a booking in a restaurant</h5>
                <p class="card-text">Confirm a table for your party at a specified time.</p>
             </div>
          </div>
@@ -149,9 +146,9 @@
    </div>
 
    <div class="row" style="padding: 8rem;">
-      <h1 class="text-center mb-3">Let's make a reservation</h1>
+      <h1 class="text-center mb-5">Let's make a reservation</h1>
       <div class="col text-center mb-5">
-         <a href="/search-availability" class="btn btn-success" style="font-size: 1.2rem;">Make Reservation Now</a>
+         <a href="/search-availability" class="button_main" style="font-size: 1.2rem;">Make Reservation Now</a>
       </div>
    </div>
    {{end}}

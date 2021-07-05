@@ -1,10 +1,10 @@
 {{template "base" .}}
 
 {{define "content"}}
-   <div class="container">
+   <div class="container bg">
       <div class="row">
          <div class="col">
-            <img src="/static/images/generals-quarters.png" class="img-fluid img-thumbnail mx-auto d-block room-image "
+            <img src="/static/images/generals-quarters.jpeg" class="img-fluid img-thumbnail mx-auto d-block"
                alt="room image">
          </div>
       </div>
@@ -22,12 +22,15 @@
          </div>
       </div>
    
-      <div class="row">
-         <div class="col text-center">
-            <a id="check-availability-button" href="#!" class="btn btn-success">Check Availability</a>
+      <div class="row mt-5">
+         <div class="col text-center mb-5">
+            <a id="check-availability-button" href="#!" class="btn btn-success" style="padding: .8rem 2rem;">Check Availability</a>
          </div>
       </div>
+   </div>
 {{end}}
+
+
 
 {{define "js"}}
    <script>

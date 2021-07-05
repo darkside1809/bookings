@@ -1,9 +1,9 @@
 {{template "base" .}}
 
 {{define "content"}}
-<div class="container">
+<div class="container text-center" style="min-height: 90vh;">
    <div class="row">
-      <div class="col">
+      <div class="col text-center">
 
          <h1>Choose a room</h1>
          {{$rooms := index .Data "rooms"}}
@@ -11,10 +11,11 @@
          <ul>
             {{range $rooms}}
                <li>
-                  <a href="/choose-room/{{.ID}}">{{.RoomName}}<br></a>
+                  <a style="font-size: 1.4rem;" href="/choose-room/{{.ID}}">{{.RoomName}}<br></a>
                </li>
             {{end}}
          </ul>
+         
       </div>
    </div>
 </div>

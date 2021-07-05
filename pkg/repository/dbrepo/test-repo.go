@@ -85,5 +85,21 @@ func (p *testDBRepo) RegisterUser(u models.User) (int, error) {
 func (p *testDBRepo) UpdateProcessedForReservation(id int, processed int) error {
 	return nil
 } 
+
+func (p *testDBRepo) AllRooms() ([]models.Room, error) {
+	var rooms []models.Room
+	return rooms, nil
+}
  
+func (p *testDBRepo) GetRestrictionsForRoomByDate(roomID int, start, end time.Time) ([]models.RoomRestriction, error)  {
+	var restrictions []models.RoomRestriction
+	return restrictions, nil
+}
+func (p *testDBRepo) InsertBlockForRoom(id int, startDate time.Time) error {
+	return nil
+}
+
+func (p *testDBRepo) DeleteBlockByID(id int) error {
+	return nil
+}
 
