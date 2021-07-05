@@ -1,13 +1,14 @@
 {{template "base" .}}
 
 {{define "content"}}
-<div class="container">
+<div class="container bg p-5">
    <div class="row">
       <div class="col-md-8 offset-2">
          {{$res := index .Data "user"}}
 
-         <h1 class="mt-4">Sign Up</h1>
-         <form method="POST" action="/user/signup" novalidate>
+         
+         <form method="POST" action="/user/signup" novalidate style="max-width: 65%; margin: 0 auto;">
+            <h1 class="mt-4">Sign Up</h1>
             <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 
             <div class="form-group mt-4">
@@ -39,7 +40,7 @@
             <!-- end email section -->
 
             <!-- start password section -->
-            <div class="form-group">
+            <div class="form-group mt-3">
                <label for="password">Password</label>
                {{with .Form.Errors.Get "password"}}
                <label class="text-danger">{{.}}</label>

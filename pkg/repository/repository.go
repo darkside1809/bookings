@@ -14,6 +14,10 @@ type DatabaseRepo interface {
 	SearchAvailabilityByDatesByRoomID(start time.Time, end time.Time, roomID int) (bool, error)
 	SearchAvailabilityForAllRooms(start time.Time, end time.Time) ([]models.Room, error)
 	GetRoomByID(id int) (models.Room, error)
+	AllRooms() ([]models.Room, error)
+	GetRestrictionsForRoomByDate(roomID int, start, end time.Time) ([]models.RoomRestriction, error)
+	InsertBlockForRoom(id int, startDate time.Time) error 
+	DeleteBlockByID(id int) error
 
 	GetAllUsers() ([]models.User, error) 
 	DeleteUserByID(id int) error

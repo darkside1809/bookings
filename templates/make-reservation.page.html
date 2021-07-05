@@ -1,19 +1,18 @@
 {{template "base" .}}
 
 {{define "content"}}
-   <div class="container mt-3">
+   <div class="container p-5 bg">
       <div class="row">
          <div class="col">
             {{$res := index .Data "reservation"}}
 
-            <h1>Make Reservation</h1>
-            <p><strong>Reservation Details</strong><br>
-               Room: {{$res.Room.RoomName}}<br>
-               Arrival: {{index .StringMap "start_date"}}<br>
-               Departure: {{index .StringMap "end_date"}}
-            </p>
-
-            <form action="/make-reservation" method="POST" class="" novalidate>
+            <form action="/make-reservation" method="POST" class="w-50 m-auto" novalidate>
+               <h1>Make Reservation</h1>
+               <p><strong>Reservation Details</strong><br>
+                  Room: {{$res.Room.RoomName}}<br>
+                  Arrival: {{index .StringMap "start_date"}}<br>
+                  Departure: {{index .StringMap "end_date"}}
+               </p>
                <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
                <input type="hidden" name="start_date" value="{{index .StringMap "start_date"}}">
                <input type="hidden" name="end_date" value="{{index .StringMap "end_date"}}">

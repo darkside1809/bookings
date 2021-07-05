@@ -20,19 +20,42 @@ import (
 
 // Functions variable holds whole functionality of our template (html data)
 var functions = template.FuncMap{
-	"humanDate": HumanDate,
+	"humanDate":  HumanDate,
+	"formatDate": FormatDate,
+	"iterate":    Iterate,
+	"add":        Add,
 }
 // app is a pointer/entry point to configuration of app
 var app *config.AppConfig
 var pathToTemplates = "./templates"
 
+func Add(a int, b int) int {
+	return a + b 
+}
+
+// Iterate returns a slice of ints starting at 1, going to count
+func Iterate(count int) []int {
+	var i int
+	var items []int
+	for i = 0; i < count; i++ {
+		items = append(items, i)
+	}
+	return items
+}
+
 // NewRenderer create new template for handlers
 func NewRenderer(a *config.AppConfig) {
 	app = a
 }
+
 // HumanDate returns formated time YYYY-MM-DD
 func HumanDate(t time.Time) string {
 	return t.Format("2006-01-02")
+}
+
+// FormatDate formats given date to a string
+func FormatDate(t time.Time, f string) string {
+	return t.Format(f)
 }
 
 // AddDefaultData set and return default struct of data
