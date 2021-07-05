@@ -1,6 +1,6 @@
 # Bookings and Reservations
 
-There are tons of hotel's web applications in the world, so I've decided to create one more. In this repository you can find something useful for yourself. Specifically, I've implemented reservation system for hotels (hostels), authentication for each user (client), and admin authorization as well, UI that looks not bad and much more functions that you can find helpful. I would appreciate your feedback.
+There are tons of hotel's web applications in the world, so I've decided to create one more. In this repository you can find something useful for yourself. Specifically, I've implemented reservation system for hotels (hostels), authentication for each user (client), UI that looks not bad and much more functions that you can find helpful. I would appreciate your feedback.
 
 ## Dependencies
 
