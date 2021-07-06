@@ -1,56 +1,151 @@
 {{template "base" .}}
 
 {{define "content"}}
-<div class="container bg p-5">
+<div class="container p-5" style="padding: 5rem 0;min-height: 70vh; max-width: 100%; background: #121419; color: rgb(235, 235, 235);">
    <div class="row">
       <div class="col-md-8 offset-2">
          {{$res := index .Data "user"}}
 
          
-         <form method="POST" action="/user/signup" novalidate style="max-width: 65%; margin: 0 auto;">
-            <h1 class="mt-4">Sign Up</h1>
+         <form method="POST" action="/user/signup" novalidate style="
+                        margin: 0 auto;
+                        max-width: 450px;
+                        padding: 40px 40px 60px;
+                        background:  #121419;
+                        border-radius: 10px;
+                        text-align: center;
+                        box-shadow: -5px -5px 10px rgba(255,255,255,0.05),
+                                 5px -5px 15px rgba(0,0,0,0.5);">
+            <h1 class="mt-4" style="color: #c7c7c7;
+                              font-weight: 500;
+                              letter-spacing: 2px;">Sign Up</h1>
             <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 
-            <div class="form-group mt-4">
-               <label for="first_name">First name:</label>
-               {{with .Form.Errors.Get "first_name"}}
-               <label class="text-danger">{{.}}</label>
-               {{end}}
-               <input class="form-control {{with .Form.Errors.Get " first_name"}} is-invalid {{end}}" type="text" name="first_name"
-                  id="first_name" value="{{$res.FirstName}}" required autocomplete="off">
+            <div  style="
+                        text-align: left;
+	                     margin-top: 40px;">
+               <div class="form-group mt-4">
+                  <label for="first_name" style="
+                        display: block;
+                        color: #868686;
+                        margin-bottom: 5px;
+                        font-size: 18px;">First name:</label>
+                  {{with .Form.Errors.Get "first_name"}}
+                  <label class="text-danger">{{.}}</label>
+                  {{end}}
+                  <input class="form-control {{with .Form.Errors.Get " first_name"}} is-invalid {{end}}" type="text" name="first_name"
+                     id="first_name" value="{{$res.FirstName}}" required autocomplete="off"
+                        style="
+                           width: 100%;
+                           height: 50px;
+                           background: #131419;
+                           border: none;
+                           outline: none;
+                           border-radius: 40px;
+                           padding: 5px 15px;
+                           color: #fff;
+                           font-size: 18px;
+                           color: #03a9f4;
+                           box-shadow: inset -2px -2px 6px rgba(255,255,255,0.1),
+                                    inset 2px 2px 6px rgba(0,0,0,0.8);">
+               </div>
+               <!-- start last name -->
+               <div class="form-group mt-3">
+                  <label for="last_name" style="
+                        display: block;
+                        color: #868686;
+                        margin-bottom: 5px;
+                        font-size: 18px;">Last name:</label>
+                  {{with .Form.Errors.Get "last_name"}}
+                  <label class="text-danger">{{.}}</label>
+                  {{end}}
+                  <input class="form-control {{with .Form.Errors.Get " last_name"}} is-invalid {{end}}" type="text" name="last_name"
+                     id="last_name" value="{{$res.LastName}}" required autocomplete="off"
+                        style="
+                           width: 100%;
+                           height: 50px;
+                           background: #131419;
+                           border: none;
+                           outline: none;
+                           border-radius: 40px;
+                           padding: 5px 15px;
+                           color: #fff;
+                           font-size: 18px;
+                           color: #03a9f4;
+                           box-shadow: inset -2px -2px 6px rgba(255,255,255,0.1),
+                                    inset 2px 2px 6px rgba(0,0,0,0.8);">
+               </div>
+               <!-- start email section -->
+               <div class="form-group mt-3">
+                  <label for="email" style="
+                        display: block;
+                        color: #868686;
+                        margin-bottom: 5px;
+                        font-size: 18px;">Email:</label>
+                  {{with .Form.Errors.Get "email"}}
+                  <label class="text-danger">{{.}}</label>
+                  {{end}}
+                  <input class="form-control {{with .Form.Errors.Get " email"}} is-invalid {{end}}" type="email" name="email"
+                     id="email" value="{{$res.Email}}" required autocomplete="off"
+                        style="
+                           width: 100%;
+                           height: 50px;
+                           background: #131419;
+                           border: none;
+                           outline: none;
+                           border-radius: 40px;
+                           padding: 5px 15px;
+                           color: #fff;
+                           font-size: 18px;
+                           color: #03a9f4;
+                           box-shadow: inset -2px -2px 6px rgba(255,255,255,0.1),
+                                    inset 2px 2px 6px rgba(0,0,0,0.8);">
+               </div>
+               <!-- end email section -->
+               <!-- start password section -->
+               <div class="form-group mt-3">
+                  <label for="password" style="
+                        display: block;
+                        color: #868686;
+                        margin-bottom: 5px;
+                        font-size: 18px;">Password</label>
+                  {{with .Form.Errors.Get "password"}}
+                  <label class="text-danger">{{.}}</label>
+                  {{end}}
+                  <input class="form-control {{with .Form.Errors.Get " password"}} is-invalid {{end}}" id="password" autocomplete="off"
+                     type='password' name='password' value="" required
+                        style="
+                           width: 100%;
+                           height: 50px;
+                           background: #131419;
+                           border: none;
+                           outline: none;
+                           border-radius: 40px;
+                           padding: 5px 15px;
+                           color: #fff;
+                           font-size: 18px;
+                           color: #03a9f4;
+                           box-shadow: inset -2px -2px 6px rgba(255,255,255,0.1),
+                                    inset 2px 2px 6px rgba(0,0,0,0.8);">
+               </div>
             </div>
-            <!-- start last name -->
-            <div class="form-group mt-3">
-               <label for="last_name">Last name:</label>
-               {{with .Form.Errors.Get "last_name"}}
-               <label class="text-danger">{{.}}</label>
-               {{end}}
-               <input class="form-control {{with .Form.Errors.Get " last_name"}} is-invalid {{end}}" type="text" name="last_name"
-                  id="last_name" value="{{$res.LastName}}" required autocomplete="off">
-            </div>
-            <!-- start email section -->
-            <div class="form-group mt-3">
-               <label for="email">Email:</label>
-               {{with .Form.Errors.Get "email"}}
-               <label class="text-danger">{{.}}</label>
-               {{end}}
-               <input class="form-control {{with .Form.Errors.Get " email"}} is-invalid {{end}}" type="email" name="email"
-                  id="email" value="{{$res.Email}}" required autocomplete="off">
-            </div>
-            <!-- end email section -->
 
-            <!-- start password section -->
-            <div class="form-group mt-3">
-               <label for="password">Password</label>
-               {{with .Form.Errors.Get "password"}}
-               <label class="text-danger">{{.}}</label>
-               {{end}}
-               <input class="form-control {{with .Form.Errors.Get " password"}} is-invalid {{end}}" id="password" autocomplete="off"
-                  type='password' name='password' value="" required>
-            </div>
-            <!-- end password section -->
-            <hr>
-            <input type="submit" class="btn btn-primary mb-4" value="Sign Up">
+            <input type="submit" class="btn btn-primary mb-4" value="Sign Up" style="
+                           width: 100%;
+                           height: 50px;
+                           background: #131419;
+                           border: none;
+                           outline: none;
+                           border-radius: 40px;
+                           padding: 5px 15px;
+                           color: #fff;
+                           font-size: 18px;
+                           color: #03a9f4;
+                           box-shadow: inset -2px -2px 6px rgba(255,255,255,0.1),
+                                    inset 2px 2px 6px rgba(0,0,0,0.8);
+                           margin-top: 40px;
+                           box-shadow: -2px -2px 6px rgba(255,255,255,0.1),
+                                          2px 2px 6px rgba(0,0,0,0.8);">
          </form>
       </div>
    </div>

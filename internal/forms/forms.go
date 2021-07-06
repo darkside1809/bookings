@@ -5,8 +5,19 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"regexp"
+	"strconv"
 	// External packages/dependencies
 	"github.com/asaskevich/govalidator"
+)
+
+var (
+	validAlpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	validPunctuation = "-x\u2010-\u2015\u2212\u30FC\uFF0D-\uFF0F " + "\u00A0\u00AD\u200B\u2060\u3000()\uFF08\uFF09\uFF3B\uFF3D." + "\\[\\]/~\u2053\u223C\uFF5E"
+	regexpValidNumber = regexp.MustCompile("^(" + validPhoneNumber + "(?:" + extnPatternForParsing + ")?)$")
+	validPhoneNumber = "\\p{Nd}" + "{" + strconv.Itoa(2) + "}" + "|" + "[" + "+\uFF0B" + "]*(?:[" + validPunctuation + string('*') + "]*" + "\\p{Nd}" + "){3,}[" +
+	validPunctuation + string('*') + validAlpha + "\\p{Nd}" + "]*"
+	extnPatternForParsing = ";ext=" + "(" + "\\p{Nd}" + "{1,7})" + "|" + "[ \u00A0\\t,]*" + "(?:e?xt(?:ensi(?:o\u0301?|\u00F3))?n?|\uFF45?\uFF58\uFF54\uFF4E?|" + "[;,x\uFF58#\uFF03~\uFF5E]|int|anexo|\uFF49\uFF4E\uFF54)" + "[:\\.\uFF0E]?[ \u00A0\\t,-]*" + "(" + "\\p{Nd}" + "{1,7})" + "#?|" + "[- ]+(" + "\\p{Nd}" + "{1,5})#"
 )
 
 // Form creates a custom form struct, embeds a url.Values object
@@ -64,3 +75,15 @@ func (f *Form) CheckEmail(field string) {
 		f.Errors.Add(field, "Ivalid email address")
 	}
 }
+
+// ValidatePhoneNumber checks for valid phone number, if it contains letter, return false
+func (f *Form) ValidatePhoneNumber(number string) bool {
+	if len(number) < 2 {
+		f.Errors.Add(number, "Ivalid phone number")
+	}
+	if !regexpValidNumber.MatchString(number) {
+		f.Errors.Add(number, "Ivalid phone number")
+	}
+	return true
+}
+

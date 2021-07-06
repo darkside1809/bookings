@@ -2,6 +2,10 @@ package handlers
 
 import (
 	// built in packages
+	//"io/ioutil"
+	"os"
+	"io"
+	//"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -150,14 +154,16 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		StartDate: startDate,
 		EndDate:   endDate,
 		RoomID:    roomID,
-		Room:      room, // add this to fix invalid data error
+		Room:      room,
 	}
 
 	form := forms.New(r.PostForm)
 
-	form.Required("first_name", "last_name", "email")
+	form.Required("first_name", "last_name", "email", "phone")
 	form.MinLength("first_name", 3)
+	form.MinLength("last_name", 2)
 	form.CheckEmail("email")
+	form.ValidatePhoneNumber(reservation.Phone)
 
 	if !form.Valid() {
 		data := make(map[string]interface{})
@@ -198,6 +204,28 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	pdf := render.NewReport("Resevation Summary")
+	pdf = render.Header(pdf, []string{"Name", "Room", "Arrival", "Departure", "Email", "Phone"})
+	pdf = render.Table(pdf, 
+		[][]string{
+			{		
+				reservation.FirstName, 
+				reservation.Room.RoomName, 
+				reservation.StartDate.Format("2006-01-02"),
+				reservation.EndDate.Format("2006-01-02"),
+				reservation.Email,
+				reservation.Phone,
+			},
+		},
+	)
+	if pdf.Err() {
+		log.Fatalf("failed ! %s", pdf.Error())
+	}
+	err = pdf.OutputFileAndClose("static/summary.pdf")
+	if err != nil {
+		log.Fatalf("error saving file: %s", err)
+	}
+
 	// send notifications - first to guest
 	htmlMessage := fmt.Sprintf(`
 		<strong>Reservation Confirmation</strong><br>
@@ -232,6 +260,49 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 	m.App.Session.Put(r.Context(), "reservation", reservation)
 	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
+}
+
+// ReservationSummary renders the table that has all information about reservation you have made
+func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
+	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		m.App.ErrorLog.Println("Can't get error from session")
+		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	m.App.Session.Remove(r.Context(), "reservation")
+
+	data := make(map[string]interface{})
+	data["reservation"] = reservation
+
+	sd := reservation.StartDate.Format("2006-01-02")
+	ed := reservation.EndDate.Format("2006-01-02")
+	stringMap := make(map[string]string)
+	stringMap["start_date"] = sd
+	stringMap["end_date"] = ed
+
+	render.Template(w, r, "reservation-summary.page.html", &models.TemplateData{
+		Data: data,
+		StringMap: stringMap,
+	})
+}
+
+// DownloadReservationSummary give to the client dowload summary data
+func (m *Repository) DownloadReservationSummary(w http.ResponseWriter, r *http.Request) {
+	f, err := os.Open("static/summary.pdf")
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	defer f.Close()
+
+	w.Header().Set("Content-type", "application/pdf")
+
+	if _, err := io.Copy(w, f); err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
 }
 
 // Generals renders the rooms page
@@ -368,32 +439,6 @@ func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "contact.page.html", &models.TemplateData{})
 }
 
-// ReservationSummary renders the table that has all information about reservation you have made
-func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
-	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
-	if !ok {
-		m.App.ErrorLog.Println("Can't get error from session")
-		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
-	}
-
-	m.App.Session.Remove(r.Context(), "reservation")
-
-	data := make(map[string]interface{})
-	data["reservation"] = reservation
-
-	sd := reservation.StartDate.Format("2006-01-02")
-	ed := reservation.EndDate.Format("2006-01-02")
-	stringMap := make(map[string]string)
-	stringMap["start_date"] = sd
-	stringMap["end_date"] = ed
-
-	render.Template(w, r, "reservation-summary.page.html", &models.TemplateData{
-		Data: data,
-		StringMap: stringMap,
-	})
-}
 
 // ChooseRoom renders available rooms you can make book now
 func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
