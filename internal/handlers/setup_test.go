@@ -18,18 +18,27 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/justinas/nosurf"
 	// My own packages
-	"github.com/darkside1809/bookings/pkg/config"
-	"github.com/darkside1809/bookings/pkg/models"
-	"github.com/darkside1809/bookings/pkg/render"
+	"github.com/darkside1809/bookings/internal/config"
+	"github.com/darkside1809/bookings/internal/models"
+	"github.com/darkside1809/bookings/internal/render"
 )
 
 var app config.AppConfig
 var session *scs.SessionManager
 var pathToTemplates = "./../../templates"
-var functions = template.FuncMap{}
+var functions = template.FuncMap{
+	"humanDate":  render.HumanDate,
+	"formatDate": render.FormatDate,
+	"iterate":    render.Iterate,
+	"add":        render.Add,
+}
 
 func TestMain(m *testing.M) {
 	gob.Register(models.Reservation{})
+	gob.Register(models.User{})
+	gob.Register(models.Room{})
+	gob.Register(models.Restriction{})
+	gob.Register(map[string]int{})
 
 	// Change this to true when app is in production
 	// But in the development mode we set it to false

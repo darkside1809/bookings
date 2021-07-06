@@ -12,12 +12,12 @@ import (
 	// External packages/dependencies
 	"github.com/alexedwards/scs/v2"
 	// My own packages
-	"github.com/darkside1809/bookings/pkg/config"
-	"github.com/darkside1809/bookings/pkg/driver"
-	"github.com/darkside1809/bookings/pkg/handlers"
-	"github.com/darkside1809/bookings/pkg/helpers"
-	"github.com/darkside1809/bookings/pkg/models"
-	"github.com/darkside1809/bookings/pkg/render"
+	"github.com/darkside1809/bookings/internal/config"
+	"github.com/darkside1809/bookings/internal/driver"
+	"github.com/darkside1809/bookings/internal/handlers"
+	"github.com/darkside1809/bookings/internal/helpers"
+	"github.com/darkside1809/bookings/internal/models"
+	"github.com/darkside1809/bookings/internal/render"
 )
 
 // App holds AppConfig structure

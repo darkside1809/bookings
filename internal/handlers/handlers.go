@@ -12,14 +12,14 @@ import (
 	// External packages/dependencies
 	"github.com/go-chi/chi"
 	// My own packages
-	"github.com/darkside1809/bookings/pkg/config"
-	"github.com/darkside1809/bookings/pkg/driver"
-	"github.com/darkside1809/bookings/pkg/forms"
-	"github.com/darkside1809/bookings/pkg/helpers"
-	"github.com/darkside1809/bookings/pkg/models"
-	"github.com/darkside1809/bookings/pkg/render"
-	"github.com/darkside1809/bookings/pkg/repository"
-	"github.com/darkside1809/bookings/pkg/repository/dbrepo"
+	"github.com/darkside1809/bookings/internal/config"
+	"github.com/darkside1809/bookings/internal/driver"
+	"github.com/darkside1809/bookings/internal/forms"
+	"github.com/darkside1809/bookings/internal/helpers"
+	"github.com/darkside1809/bookings/internal/models"
+	"github.com/darkside1809/bookings/internal/render"
+	"github.com/darkside1809/bookings/internal/repository"
+	"github.com/darkside1809/bookings/internal/repository/dbrepo"
 )
 
 // Repo used by handlers
@@ -66,14 +66,14 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	res, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
 		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
 	room, err := m.DB.GetRoomByID(res.RoomID)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't find room")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return	
 	}
 
@@ -231,7 +231,6 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	m.App.MailChan <- msg
 
 	m.App.Session.Put(r.Context(), "reservation", reservation)
-
 	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
 }
 
@@ -375,7 +374,7 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	if !ok {
 		m.App.ErrorLog.Println("Can't get error from session")
 		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
@@ -507,7 +506,7 @@ func (m *Repository) PostShowSignUp(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "can't parse form!")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 

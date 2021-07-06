@@ -10,7 +10,7 @@ import (
 	// External packages/dependencies
 	"github.com/xhit/go-simple-mail/v2"
 	// My own packages
-	"github.com/darkside1809/bookings/pkg/models"
+	"github.com/darkside1809/bookings/internal/models"
 	
 )
 

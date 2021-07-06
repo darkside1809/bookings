@@ -10,7 +10,7 @@ import (
 	// External packages/dependencies
 	"golang.org/x/crypto/bcrypt"
 	// My own packages
-	"github.com/darkside1809/bookings/pkg/models"
+	"github.com/darkside1809/bookings/internal/models"
 )
 
 // GetAllUsers return all existing users from database
