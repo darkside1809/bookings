@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/darkside1809/bookings/pkg/forms"
+	"github.com/darkside1809/bookings/internal/forms"
 )
 
 // TemplateData renders the different data types to client

@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	"github.com/darkside1809/bookings/pkg/config"
+	"github.com/darkside1809/bookings/internal/config"
 	"github.com/go-chi/chi"
 )
 

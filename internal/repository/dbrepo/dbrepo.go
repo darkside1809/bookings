@@ -4,8 +4,8 @@ import (
 	// built in Golang packages
 	"database/sql"
 	// My own packages
-	"github.com/darkside1809/bookings/pkg/config"
-	"github.com/darkside1809/bookings/pkg/repository"
+	"github.com/darkside1809/bookings/internal/config"
+	"github.com/darkside1809/bookings/internal/repository"
 )
 
 // testDBRepo holds pointers to configs and DB for testing

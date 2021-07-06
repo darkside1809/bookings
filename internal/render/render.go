@@ -14,8 +14,8 @@ import (
 	// External packages/dependencies
 	"github.com/justinas/nosurf"
 	// My own packages
-	"github.com/darkside1809/bookings/pkg/config"
-	"github.com/darkside1809/bookings/pkg/models"
+	"github.com/darkside1809/bookings/internal/config"
+	"github.com/darkside1809/bookings/internal/models"
 )
 
 // Functions variable holds whole functionality of our template (html data)

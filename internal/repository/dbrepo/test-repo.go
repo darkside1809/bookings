@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/darkside1809/bookings/pkg/models"
+	"github.com/darkside1809/bookings/internal/models"
 )
 
 func(p *testDBRepo) GetAllUsers() (users []models.User, err error) {

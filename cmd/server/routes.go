@@ -7,8 +7,8 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	// My own packages
-	"github.com/darkside1809/bookings/pkg/config"
-	"github.com/darkside1809/bookings/pkg/handlers"
+	"github.com/darkside1809/bookings/internal/config"
+	"github.com/darkside1809/bookings/internal/handlers"
 )
 
 // Route set routes with its handler, multiplexer(middleware, sessionFuncs, secure requests),
