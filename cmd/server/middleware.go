@@ -26,6 +26,7 @@ func NoSurf(next http.Handler) http.Handler {
 func SessionLoad(next http.Handler) http.Handler {
 	return session.LoadAndSave(next)
 }
+
 // Auth checks user's authentication,
 // -if IsAuthenticated returns true, user will be logged in
 // -if IsAuthenticated returns false, user won't be able to log in

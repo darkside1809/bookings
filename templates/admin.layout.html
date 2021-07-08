@@ -102,7 +102,8 @@
                <!-- start users section -->
                
                <li class="nav-item"><a class="nav-link" href="/admin/users-all"><i class="ti-user menu-icon"></i>
-                     Users</a></li>
+                     Users</a>
+                  </li>
                <!-- end users section -->
             </ul>
          </nav>
@@ -173,10 +174,10 @@
          })
       }
 
-      {{ with .Error}}
+      {{with .Error}}
          notify("{{.}}", "error")
-      {{ end}}
-      {{ with .Flash}}
+      {{end}}
+      {{with .Flash}}
          notify("{{.}}", "success")
       {{end}}
       {{with .Warning}}

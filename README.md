@@ -82,4 +82,12 @@ production:
   url: {{envOr "DATABASE_URL" "postgres://postgres:postgres@127.0.0.1:5432/myapp_production"}}
 ```
 
+<!-- **Run Application**
+
+To run this application, you need to create `file_name.bat` batch file, and write in names of the files which can be executed. It makes the process of typing in the command line more faster. So write the command down below in the command prompt to start the application or you can just copy `.bat` file from my repository, it's up to you.
+
+```bash
+./bookings
+``` -->
+
 ...and you are all set. Let's Goooo!!!

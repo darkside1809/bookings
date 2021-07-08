@@ -1,9 +1,24 @@
 {{template "base" .}}
-
+<style>
+  .links ul {
+    text-align: start;
+   }
+  .links li {
+   list-style: none;
+   }
+  .links a {
+     text-decoration: none;
+     color: whitesmoke;
+  }
+  .links a:hover {
+      text-decoration: underline;
+      color: orange;
+   }
+</style>
 {{define "content"}}
-<div class="container text-center" style="min-height: 90vh;">
+<div class="container bg text-center" style="min-height: 100vh;">
    <div class="row">
-      <div class="col text-center">
+      <div class="col links text-center" style="margin-top: 10rem;">
 
          <h1>Choose a room</h1>
          {{$rooms := index .Data "rooms"}}

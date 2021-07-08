@@ -15,6 +15,8 @@ import (
 	"time"
 	// External packages/dependencies
 	"github.com/go-chi/chi"
+	"github.com/johnfercher/maroto/pkg/consts"
+	"github.com/johnfercher/maroto/pkg/pdf"
 	// My own packages
 	"github.com/darkside1809/bookings/internal/config"
 	"github.com/darkside1809/bookings/internal/driver"
@@ -204,9 +206,10 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pdf := render.NewReport("Resevation Summary")
-	pdf = render.Header(pdf, []string{"Name", "Room", "Arrival", "Departure", "Email", "Phone"})
-	pdf = render.Table(pdf, 
+	pdf := pdf.NewMaroto(consts.Portrait, consts.A4)
+	pdf.SetPageMargins(20, 10, 20)
+	render.BuildHeading(pdf)
+	render.BuildList(pdf, 
 		[][]string{
 			{		
 				reservation.FirstName, 
@@ -218,12 +221,11 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 			},
 		},
 	)
-	if pdf.Err() {
-		log.Fatalf("failed ! %s", pdf.Error())
-	}
+
 	err = pdf.OutputFileAndClose("static/summary.pdf")
-	if err != nil {
-		log.Fatalf("error saving file: %s", err)
+	if err != nil{
+		helpers.ServerError(w, err)
+		os.Exit(1)
 	}
 
 	// send notifications - first to guest

@@ -1,12 +1,12 @@
 {{template "base" .}}
 
 {{define "content"}}
-   <div class="container p-5 bg">
+   <div class="container p-5 bg" style="min-height: 100vh;">
       <div class="row">
          <div class="col">
             {{$res := index .Data "reservation"}}
 
-            <form action="/make-reservation" method="POST" class="w-50 m-auto" novalidate>
+            <form action="/make-reservation" method="POST" class="w-50 mt-5 m-auto" novalidate>
                <h1>Make Reservation</h1>
                <p><strong>Reservation Details</strong><br>
                   Room: {{$res.Room.RoomName}}<br>
