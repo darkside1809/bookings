@@ -12,8 +12,11 @@ import (
 	"time"
 
 	// External packages/dependencies
-	"github.com/jung-kurt/gofpdf"
 	"github.com/justinas/nosurf"
+	"github.com/johnfercher/maroto/pkg/consts"
+	"github.com/johnfercher/maroto/pkg/pdf"
+	"github.com/johnfercher/maroto/pkg/props"
+	"github.com/johnfercher/maroto/pkg/color"
 	// My own packages
 	"github.com/darkside1809/bookings/internal/config"
 	"github.com/darkside1809/bookings/internal/models"
@@ -132,48 +135,83 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 	return myCache, nil
 }
 
-// NewReport returns formated pdf
-func NewReport(head string) *gofpdf.Fpdf{
-	pdf := gofpdf.New("L", "mm", "A4", "")
-	pdf.AddPage()
-
-	pdf.SetFont("Times", "B", 28)
-	pdf.Cell(40, 10, head)
-	pdf.Ln(12)
-
-	pdf.SetFont("Times", "B", 20)
-	pdf.Cell(40, 10, time.Now().Format("Mon Jan 2, 2006"))
-	pdf.Ln(20)
-
-	return pdf
+// BuildHeading creates header a pdf file
+func BuildHeading(m pdf.Maroto) {
+	m.RegisterHeader(func() {
+		m.Row(50, func() {
+			m.Col(12, func() {
+				err := m.FileImage("static/images/about.jpg", props.Rect{
+					Center: true,
+					Percent: 90,
+				})
+				if err != nil {
+					log.Print(err)
+				}
+			})
+		})
+	})
 }
 
-// Header set header to pdf file
-func Header(pdf *gofpdf.Fpdf, headerText []string) *gofpdf.Fpdf {
-	pdf.SetFont("Times", "B", 16)
-	pdf.SetFillColor(240, 240, 240)
+// BuildList creates a table
+func BuildList(m pdf.Maroto, contents [][]string) {
+	tableHeadings := []string{"Name", "Room", "Arrival", "Departure", "Email", "Phone"}
+	
+	lightPurpleColor := getLightPurpleColor()
+	m.SetBackgroundColor(getDarkPurpleColor())
 
-	for _, str := range headerText {
-		pdf.CellFormat(40, 10, str, "1", 0, "", true, 0, "")
-	}
-	pdf.Ln(-1)
+	m.Row(12, func() {
+		m.Col(12, func() {
+			m.Text("Reservation Summary", props.Text{
+				Top: 		2,
+				Size: 	15,
+				Color: 	color.NewWhite(),
+				Family: 	consts.Courier,
+				Style: 	consts.Bold,
+				Align: 	consts.Center,
+			})
+		})
+	})
+	m.SetBackgroundColor(color.NewWhite())
 
-	return pdf
+	m.TableList(tableHeadings, contents, props.TableList{
+		HeaderProp: props.TableListContent{
+			Size: 11,
+			GridSizes: []uint{2, 2, 2, 2, 3, 3},
+		},
+		ContentProp: props.TableListContent{
+			Size: 9,
+			GridSizes: []uint{2, 2, 2, 2, 3, 3},
+		},
+		Align: consts.Left,
+		HeaderContentSpace: 1,
+		Line: false,
+		AlternatedBackground: &lightPurpleColor,
+	})
 }
 
-// Table creates table with its own style
-func Table(pdf *gofpdf.Fpdf, tbl [][]string) *gofpdf.Fpdf {
-	pdf.SetFont("Times", "", 16)
-	pdf.SetFillColor(255, 255, 255)
-
-	align := []string{"L", "C", "L", "R", "R", "R"}
-	for _, line := range tbl {
-		for i, str := range line {
-			pdf.CellFormat(40, 10, str, "1", 0, align[i], false, 0, "")
-		}
-		pdf.Ln(-1)
+// getTealColor get definite color 
+func getTealColor() color.Color {
+	return color.Color{
+		Red: 3,
+		Green: 166,
+		Blue: 166,
 	}
-	pdf.Ln(-1)
+}
 
-	return pdf
+// getLightPurpleColor get definite color 
+func getLightPurpleColor() color.Color {
+	return color.Color{
+		Red: 210,
+		Green: 200,
+		Blue: 230,
+	}
+}
+
+// getDarkPurpleColor get definite color 
+func getDarkPurpleColor() color.Color {
+	return color.Color{
+		Red: 88,
+		Green: 88,
+		Blue: 99,
+	}
 }

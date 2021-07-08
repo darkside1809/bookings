@@ -1,13 +1,13 @@
 {{template "base" .}}
 
 {{define "content"}}
-   <div class="container bg p-5" style="min-height: 80vh;">
+   <div class="container bg p-5" style="min-height: 100vh;">
       <div class="row p-5">
          <div class="col-md-3"></div>
-         <div class="col-md-6">
+         <div class="col-md-6"  data-aos="fade-down" data-aos-duration="1000">
             <h1 class="mt-5 mb-4">Search for availability</h1>
    
-            <form action="/search-availability" method="POST" novalidate class="needs-validation">
+            <form action="/search-availability" method="POST" novalidate class="needs-validation" style="max-width: 600px;">
                <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
                <div class="row">
                   <div class="col">

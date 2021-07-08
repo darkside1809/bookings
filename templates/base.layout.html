@@ -12,12 +12,23 @@
       integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
    <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/css/datepicker-bs4.min.css">
+   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
    <link rel="stylesheet" href="/static/css/style.css">
    <title>NJM Hotel</title>
 </head>
 
+<style>
+   .scroll-down #navbar{
+      transition: all .3s ease-in-out;
+      transform: translate3d(0, -100%, 0);
+   }
+   .scroll-up #navbar{
+      transition: all .3s ease-in-out;
+   }
+</style>
+
 <body style="overflow-x: hidden;">
-   <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+   <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark bg-home" style="width: 100%; position: fixed; z-index: 2973; top: 0; left: 0;">
       <div class="container-fluid">
          <a class="navbar-brand" href="/">NJM</a>
          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -79,7 +90,7 @@
 
    {{end}}
    </div>
-   <div class="row footer d-flex" style="width: 101%; padding: 1.4rem; background: #112432;">
+   <div class="row footer d-flex" style="width: 102%; padding: 1.4rem; background: #181818;">
       <div class="ml-2" style="color: #fff; width: 30%;">
          <strong>NJM Hotel</strong><br>
          21 Jump Street
@@ -104,6 +115,7 @@
    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/js/datepicker-full.min.js"></script>
    <script src="https://unpkg.com/notie"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
    <script src="/static/js/app.js"></script>
 
 
@@ -112,7 +124,28 @@
 {{end}}
 
    <script>
+      const body = document.body;
+      let lastScroll = 0;
 
+      window.addEventListener("scroll", () => {
+         const currentScroll = window.pageYOffset;
+         if (currentScroll <= 0) {
+            body.classList.remove("scroll-up")
+         }
+         if (currentScroll > lastScroll && !body.classList.contains("scroll-down")) {
+            body.classList.remove("scroll-up")
+            body.classList.add("scroll-down")
+         }
+         if (currentScroll < lastScroll && body.classList.contains("scroll-down")) {
+            body.classList.remove("scroll-down")
+            body.classList.add("scroll-up")
+         }
+
+         lastScroll = currentScroll;
+      })
+
+      AOS.init();
+   
       let attention = Prompt();
 
       (function () {
