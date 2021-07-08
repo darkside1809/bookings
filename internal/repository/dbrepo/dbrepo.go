@@ -8,11 +8,6 @@ import (
 	"github.com/darkside1809/bookings/internal/repository"
 )
 
-// testDBRepo holds pointers to configs and DB for testing
-type testDBRepo struct {
-	App *config.AppConfig
-	DB  *sql.DB
-}
 // postgresDBRepo holds pointers to configs and DB
 type postgresDBRepo struct {
 	App *config.AppConfig
@@ -23,11 +18,5 @@ func NewPostgresRepo(conn *sql.DB, a *config.AppConfig) repository.DatabaseRepo 
 	return &postgresDBRepo {
 		App: a,
 		DB: conn,
-	}
-}
-// NewTestingRepo app configs, and returns DatabaseRepo interface for testing
-func NewTestingRepo(a *config.AppConfig) repository.DatabaseRepo {
-	return &testDBRepo {
-		App: a,
 	}
 }
