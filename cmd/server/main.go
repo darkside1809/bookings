@@ -30,7 +30,7 @@ var errorLog *log.Logger
 // Session holds pointer to SessionManager structure from external package
 var session *scs.SessionManager
 
-// Main function starts listening a server at host, port
+// Main function start listen and serve a server at 0.0.0.0:9999
 func main() {
 	db, err := execute()
 	if err != nil {
@@ -56,6 +56,10 @@ func main() {
 	}
 }
 
+// execute function uses gob package for encoding and decoding data from models, 
+// creates session and cookies, connects to PostgreSQL database,
+// creates templates and set to them default pattern,
+// uses NewRepo, NewHandlers, NewRenderer, NewHelpers to initialize the server to work properly
 func execute() (*driver.DB, error) {
 	gob.Register(models.Reservation{})
 	gob.Register(models.User{})
@@ -65,10 +69,6 @@ func execute() (*driver.DB, error) {
 
 	mailChan := make(chan models.MailData)
 	app.MailChan = mailChan
-
-	// Change this to true when app is in production
-	// But in the development mode we set it to false
-	app.InProduction = false
 
 	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	app.InfoLog = infoLog
@@ -102,7 +102,6 @@ func execute() (*driver.DB, error) {
 
 	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
-
 	render.NewRenderer(&app)
 	helpers.NewHelpers(&app)
 

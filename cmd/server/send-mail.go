@@ -1,3 +1,6 @@
+// To use this package and SMTP server, you need to install MailHog
+// and run it in localhost:8025, after run your application and 
+// make a reservation
 package main
 
 import (
@@ -11,7 +14,6 @@ import (
 	"github.com/xhit/go-simple-mail/v2"
 	// My own packages
 	"github.com/darkside1809/bookings/internal/models"
-	
 )
 
 // listenForMail creates a goroutine, that wait for sending email from user to user
