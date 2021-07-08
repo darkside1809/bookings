@@ -11,11 +11,10 @@ import (
 	"github.com/darkside1809/bookings/internal/handlers"
 )
 
-// Route set routes with its handler, multiplexer(middleware, sessionFuncs, secure requests),
+// Route set routes with its handlers, multiplexer(middleware, sessionFuncs, secure requests),
 // and HTTP methods
 func routes(app *config.AppConfig) http.Handler {
 	mux := chi.NewRouter()
-
 	mux.Use(middleware.Recoverer)
 	mux.Use(NoSurf)
 	mux.Use(SessionLoad)
@@ -35,7 +34,6 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Post("/search-availability-json", handlers.Repo.AvailabilityJSON)
 	mux.Get("/choose-room/{id}", handlers.Repo.ChooseRoom)
 	mux.Get("/book-room", handlers.Repo.BookRoom)
-
 	mux.Get("/contact", handlers.Repo.Contact)
 
 	mux.Get("/user/login", handlers.Repo.ShowLogin)
@@ -45,7 +43,7 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Post("/user/signup", handlers.Repo.PostShowSignUp)
 
 	mux.Route("/admin", func(mux chi.Router) {
-		// mux.Use(Auth)
+		mux.Use(Auth)
 		mux.Get("/dashboard", handlers.Repo.AdminDashboard)
 		mux.Get("/reservations-new", handlers.Repo.AdminNewReservations)
 		mux.Get("/reservations-all", handlers.Repo.AdminAllReservations)
