@@ -12,23 +12,13 @@ import (
 	// External packages/dependencies
 	"github.com/alexedwards/scs/v2"
 	// My own packages
-	"github.com/darkside1809/bookings/internal/config"
 	"github.com/darkside1809/bookings/internal/driver"
 	"github.com/darkside1809/bookings/internal/handlers"
 	"github.com/darkside1809/bookings/internal/helpers"
 	"github.com/darkside1809/bookings/internal/models"
 	"github.com/darkside1809/bookings/internal/render"
+	"github.com/darkside1809/bookings/cmd/server"
 )
-
-// App holds AppConfig structure
-var app config.AppConfig
-
-// Info and errors handling
-var infoLog *log.Logger
-var errorLog *log.Logger
-
-// Session holds pointer to SessionManager structure from external package
-var session *scs.SessionManager
 
 // Main function start listen and serve a server at 0.0.0.0:9999
 func main() {
@@ -38,15 +28,15 @@ func main() {
 	}
 	defer db.SQL.Close()
 
-	defer close(app.MailChan)
+	defer close(server.App.MailChan)
 	fmt.Println("Starting mail listener...")
-	listenForMail()
+	server.ListenForMail()
 
 	host := "0.0.0.0"
 	port := "9999"
 	srv := &http.Server{
 		Addr:    net.JoinHostPort(host, port),
-		Handler: routes(&app),
+		Handler: server.Init(&server.App),
 	}
 
 	fmt.Printf("Server start listening at %s ;) Let's GOOO!\n", srv.Addr,)
@@ -68,21 +58,21 @@ func execute() (*driver.DB, error) {
 	gob.Register(map[string]int{})
 
 	mailChan := make(chan models.MailData)
-	app.MailChan = mailChan
+	server.App.MailChan = mailChan
 
-	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
-	app.InfoLog = infoLog
+	server.InfoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	server.App.InfoLog = server.InfoLog
 
-	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
-	app.ErrorLog = errorLog
+	server.ErrorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	server.App.ErrorLog = server.ErrorLog
 
-	session = scs.New()
-	session.Lifetime = 24 * time.Hour
-	session.Cookie.Persist = true
-	session.Cookie.SameSite = http.SameSiteLaxMode
-	session.Cookie.Secure = app.InProduction
+	server.Session = scs.New()
+	server.Session.Lifetime = 24 * time.Hour
+	server.Session.Cookie.Persist = true
+	server.Session.Cookie.SameSite = http.SameSiteLaxMode
+	server.Session.Cookie.Secure = server.App.InProduction
 
-	app.Session = session
+	server.App.Session = server.Session
 
 	// Connect to database
 	log.Println("Connecting to database...")
@@ -97,13 +87,13 @@ func execute() (*driver.DB, error) {
 		return nil, err
 	}
 	log.Println("Creating templates...")
-	app.TemplateCache = tc
-	app.UseCache = false
+	server.App.TemplateCache = tc
+	server.App.UseCache = false
 
-	repo := handlers.NewRepo(&app, db)
+	repo := handlers.NewRepo(&server.App, db)
 	handlers.NewHandlers(repo)
-	render.NewRenderer(&app)
-	helpers.NewHelpers(&app)
+	render.NewRenderer(&server.App)
+	helpers.NewHelpers(&server.App)
 
 	return db, nil
 }

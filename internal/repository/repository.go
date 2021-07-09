@@ -6,7 +6,7 @@ import (
 	// My own packages
 	"github.com/darkside1809/bookings/internal/models"
 )
-// DatabaseRepo is an interface that must be implemented by postgresDBRepo
+// DatabaseRepo is an interface that must be implemented by postgresDBService
 type DatabaseRepo interface {
 	InsertReservation(res models.Reservation) (int, error)
 	InsertRoomRestriction(res models.RoomRestriction) error
@@ -16,7 +16,6 @@ type DatabaseRepo interface {
 	UpdateReservation(r models.Reservation) error
 	DeleteReservationByID(id int) error
 	UpdateProcessedForReservation(id int, processed int) error
-
 
 	SearchAvailabilityByDatesByRoomID(start time.Time, end time.Time, roomID int) (bool, error)
 	SearchAvailabilityForAllRooms(start time.Time, end time.Time) ([]models.Room, error)

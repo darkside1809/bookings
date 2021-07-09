@@ -1,13 +1,24 @@
-package main
+package server
 
 import (
 	// built in Golang packages
 	"net/http"
+	"log"
 	// External packages/dependencies
 	"github.com/justinas/nosurf"
+	"github.com/alexedwards/scs/v2"
 	// My own packages
 	"github.com/darkside1809/bookings/internal/helpers"
+	"github.com/darkside1809/bookings/internal/config"
 )
+
+// App holds AppConfig structure
+var App config.AppConfig
+// Info and errors for proper error handling
+var InfoLog *log.Logger
+var ErrorLog *log.Logger
+// Session holds pointer to SessionManager structure from external package
+var Session *scs.SessionManager
 
 // NoSurf adds CSRF protection to all POST requests
 func NoSurf(next http.Handler) http.Handler {
@@ -16,7 +27,7 @@ func NoSurf(next http.Handler) http.Handler {
 	csrfHandler.SetBaseCookie(http.Cookie{
 		HttpOnly: true,
 		Path:     "/",
-		Secure:   app.InProduction,
+		Secure:   App.InProduction,
 		SameSite: http.SameSiteLaxMode,
 	})
 	return csrfHandler
@@ -24,7 +35,7 @@ func NoSurf(next http.Handler) http.Handler {
 
 // SessionLoad loads and saves the session on every request
 func SessionLoad(next http.Handler) http.Handler {
-	return session.LoadAndSave(next)
+	return Session.LoadAndSave(next)
 }
 
 // Auth checks user's authentication,
@@ -33,7 +44,7 @@ func SessionLoad(next http.Handler) http.Handler {
 func Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if !helpers.IsAuthenticated(r) {
-			session.Put(r.Context(), "error", "Login first!")
+			Session.Put(r.Context(), "error", "Login first!")
 			http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 			return
 		}

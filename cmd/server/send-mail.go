@@ -1,7 +1,7 @@
 // To use this package and SMTP server, you need to install MailHog
 // and run it in localhost:8025, after run your application and 
 // make a reservation
-package main
+package server
 
 import (
 	// built in Golang packages
@@ -17,11 +17,11 @@ import (
 )
 
 // listenForMail creates a goroutine, that wait for sending email from user to user
-func listenForMail() {
+func ListenForMail() {
 	go func() {
 		for {
-			msg := <-app.MailChan
-			sendMessage(msg)
+			msg := <-App.MailChan
+			SendMessage(msg)
 		}
 	}()
 }
@@ -29,7 +29,7 @@ func listenForMail() {
 // -connect client to server,
 // -read messages from given template/file
 // -send email message from given sender address to the given receiver address
-func sendMessage(m models.MailData) {
+func SendMessage(m models.MailData) {
 	server := mail.NewSMTPClient()
 	server.Host = "localhost"
 	server.Port = 1025
@@ -40,7 +40,7 @@ func sendMessage(m models.MailData) {
 
 	client, err := server.Connect()
 	if err != nil {
-		errorLog.Println(err)
+		ErrorLog.Println(err)
 	}
 
 	email := mail.NewMSG()
@@ -50,7 +50,7 @@ func sendMessage(m models.MailData) {
 	} else {
 		data, err := ioutil.ReadFile(fmt.Sprintf("./email-templates/%s", m.Template))
 		if err != nil {
-			app.ErrorLog.Println(err)
+			App.ErrorLog.Println(err)
 		}
 		mailTemplate := string(data)
 		msgToSend := strings.Replace(mailTemplate, "[%body%]", m.Content, 1)
