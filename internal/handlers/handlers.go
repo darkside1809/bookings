@@ -25,7 +25,7 @@ import (
 	"github.com/darkside1809/bookings/internal/models"
 	"github.com/darkside1809/bookings/internal/render"
 	"github.com/darkside1809/bookings/internal/repository"
-	"github.com/darkside1809/bookings/internal/repository/dbrepo"
+	"github.com/darkside1809/bookings/internal/repository/services"
 )
 
 // Repo used by handlers
@@ -41,7 +41,7 @@ type Repository struct {
 func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
-		DB: dbrepo.NewPostgresRepo(db.SQL, a),
+		DB: services.NewPostgresRepo(db.SQL, a),
 	}
 }
 

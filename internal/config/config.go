@@ -10,7 +10,7 @@ import (
 	"github.com/darkside1809/bookings/internal/models"
 )
 
-// AppConfig holds the application configurations
+// AppConfig holds the application's configurations
 type AppConfig struct {
 	UseCache      bool
 	TemplateCache map[string]*template.Template

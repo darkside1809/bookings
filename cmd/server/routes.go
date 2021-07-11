@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	// built in Golang packages
@@ -11,14 +11,13 @@ import (
 	"github.com/darkside1809/bookings/internal/handlers"
 )
 
-// Route set routes with its handlers, multiplexer(middleware, sessionFuncs, secure requests),
+// Init set routes with its handlers, multiplexer(middleware, sessionFuncs, secure requests),
 // and HTTP methods
-func routes(app *config.AppConfig) http.Handler {
+func Init(app *config.AppConfig) http.Handler {
 	mux := chi.NewRouter()
 	mux.Use(middleware.Recoverer)
 	mux.Use(NoSurf)
 	mux.Use(SessionLoad)
-
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/about", handlers.Repo.About)
 	mux.Get("/generals-quarters", handlers.Repo.Generals)
@@ -41,7 +40,7 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/user/logout", handlers.Repo.Logout)
 	mux.Get("/user/signup", handlers.Repo.ShowSignUp)
 	mux.Post("/user/signup", handlers.Repo.PostShowSignUp)
-
+	
 	mux.Route("/admin", func(mux chi.Router) {
 		mux.Use(Auth)
 		mux.Get("/dashboard", handlers.Repo.AdminDashboard)
@@ -58,10 +57,9 @@ func routes(app *config.AppConfig) http.Handler {
 		mux.Get("/users/{src}/{id}", handlers.Repo.AdminShowUsers)
 		mux.Post("/users/{src}/{id}", handlers.Repo.AdminPostShowUsers)
 		mux.Get("/delete-user/{src}/{id}", handlers.Repo.AdminDeleteUser)
-
 	})
-
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
+	
 	return mux
 }
