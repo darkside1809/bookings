@@ -18,7 +18,6 @@ func Init(app *config.AppConfig) http.Handler {
 	mux.Use(middleware.Recoverer)
 	mux.Use(NoSurf)
 	mux.Use(SessionLoad)
-
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/about", handlers.Repo.About)
 	mux.Get("/generals-quarters", handlers.Repo.Generals)
@@ -41,7 +40,7 @@ func Init(app *config.AppConfig) http.Handler {
 	mux.Get("/user/logout", handlers.Repo.Logout)
 	mux.Get("/user/signup", handlers.Repo.ShowSignUp)
 	mux.Post("/user/signup", handlers.Repo.PostShowSignUp)
-
+	
 	mux.Route("/admin", func(mux chi.Router) {
 		mux.Use(Auth)
 		mux.Get("/dashboard", handlers.Repo.AdminDashboard)
