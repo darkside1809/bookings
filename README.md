@@ -90,4 +90,10 @@ To run this application, you need to create `file_name.bat` batch file, and writ
 ./bookings
 ``` -->
 
+**Start SMTP server**
+
+[Download MailHog](https://github.com/mailhog/MailHog/releases/tag/v1.0.1) SMTP server and run it to send a message
+
+
+
 ...and you are all set. Let's Goooo!!!
