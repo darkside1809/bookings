@@ -12,7 +12,7 @@ import (
 // app is a pointer/entry point to configuration of app
 var app *config.AppConfig
 
-// NewHelpers sets up app's configuration for helpers
+// NewHelpers sets up app config for helpers
 func NewHelpers(a *config.AppConfig) {
 	app = a
 }

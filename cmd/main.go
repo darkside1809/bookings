@@ -36,7 +36,7 @@ func main() {
 	port := "9999"
 	srv := &http.Server{
 		Addr:    net.JoinHostPort(host, port),
-		Handler: server.Init(&server.App),
+		Handler: server.Routes(&server.App),
 	}
 
 	fmt.Printf("Server start listening at %s ;) Let's GOOO!\n", srv.Addr,)

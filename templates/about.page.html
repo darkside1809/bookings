@@ -3,7 +3,6 @@
    .about-section {
       display: flex;
       width: 100%;
-      min-height: 100vh;
       background: url(static/images/about.jpg) no-repeat;
       background-size: 100%;
       overflow: hidden;
@@ -59,7 +58,7 @@
 </style>
 
 {{define "content"}}
-<div class="about-section">
+<div class="about-section" style="min-height: 100vh;">
    <div class="row inner-container"  data-aos="fade-right" data-aos-duration="1000">
       <h1 class="mt-3 header">About NJM Hotel</h1>
       <p class="text">

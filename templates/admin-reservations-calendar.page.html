@@ -51,9 +51,9 @@
                   {{range $index := iterate $dim}}
                   <td class="text-center">
                      {{if gt (index $reservations (printf "%s-%s-%d" $curYear $curMonth (add $index 1))) 0}}
-                     <li style="list-style: none;">
+                     <a href="#!">
                         <span class="text-danger">R</span>
-                     </li>
+                     </a>
                      {{else}}
                      <input {{if gt (index $blocks (printf "%s-%s-%d" $curYear $curMonth (add $index 1))) 0 }} checked
                         name="remove_block_{{$roomID}}_{{printf " %s-%s-%d" $curYear $curMonth (add $index 1)}}"

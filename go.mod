@@ -10,6 +10,7 @@ require (
 	github.com/jackc/pgconn v1.8.1
 	github.com/jackc/pgx/v4 v4.11.0
 	github.com/johnfercher/maroto v0.33.0
+	github.com/jung-kurt/gofpdf v1.16.2 // indirect
 	github.com/justinas/nosurf v1.1.1
 	github.com/lib/pq v1.10.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect

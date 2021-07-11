@@ -11,13 +11,15 @@ import (
 	"github.com/darkside1809/bookings/internal/handlers"
 )
 
-// Init set routes with its handlers, multiplexer(middleware, sessionFuncs, secure requests),
+// Route set routes with its handler, multiplexer(middleware, sessionFuncs, secure requests),
 // and HTTP methods
-func Init(app *config.AppConfig) http.Handler {
+func Routes(app *config.AppConfig) http.Handler {
 	mux := chi.NewRouter()
+
 	mux.Use(middleware.Recoverer)
 	mux.Use(NoSurf)
 	mux.Use(SessionLoad)
+
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/about", handlers.Repo.About)
 	mux.Get("/generals-quarters", handlers.Repo.Generals)
@@ -33,6 +35,7 @@ func Init(app *config.AppConfig) http.Handler {
 	mux.Post("/search-availability-json", handlers.Repo.AvailabilityJSON)
 	mux.Get("/choose-room/{id}", handlers.Repo.ChooseRoom)
 	mux.Get("/book-room", handlers.Repo.BookRoom)
+
 	mux.Get("/contact", handlers.Repo.Contact)
 
 	mux.Get("/user/login", handlers.Repo.ShowLogin)
@@ -40,9 +43,9 @@ func Init(app *config.AppConfig) http.Handler {
 	mux.Get("/user/logout", handlers.Repo.Logout)
 	mux.Get("/user/signup", handlers.Repo.ShowSignUp)
 	mux.Post("/user/signup", handlers.Repo.PostShowSignUp)
-	
+
 	mux.Route("/admin", func(mux chi.Router) {
-		mux.Use(Auth)
+		// mux.Use(Auth)
 		mux.Get("/dashboard", handlers.Repo.AdminDashboard)
 		mux.Get("/reservations-new", handlers.Repo.AdminNewReservations)
 		mux.Get("/reservations-all", handlers.Repo.AdminAllReservations)
@@ -57,9 +60,10 @@ func Init(app *config.AppConfig) http.Handler {
 		mux.Get("/users/{src}/{id}", handlers.Repo.AdminShowUsers)
 		mux.Post("/users/{src}/{id}", handlers.Repo.AdminPostShowUsers)
 		mux.Get("/delete-user/{src}/{id}", handlers.Repo.AdminDeleteUser)
+
 	})
+
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
-	
 	return mux
 }
