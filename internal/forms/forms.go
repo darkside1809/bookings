@@ -87,4 +87,3 @@ func (f *Form) ValidatePhoneNumber(number string) bool {
 	}
 	return true
 }
-

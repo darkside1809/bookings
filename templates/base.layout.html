@@ -18,17 +18,19 @@
 </head>
 
 <style>
-   .scroll-down #navbar{
+   .scroll-down #navbar {
       transition: all .3s ease-in-out;
       transform: translate3d(0, -100%, 0);
    }
-   .scroll-up #navbar{
+
+   .scroll-up #navbar {
       transition: all .3s ease-in-out;
    }
 </style>
 
 <body style="overflow-x: hidden;">
-   <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark bg-home" style="width: 100%; position: fixed; z-index: 2973; top: 0; left: 0;">
+   <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark bg-home"
+      style="width: 100%; position: fixed; z-index: 2973; top: 0; left: 0;">
       <div class="container-fluid">
          <a class="navbar-brand" href="/">NJM</a>
          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -63,23 +65,23 @@
                </li>
                <li class="nav-item">
                   {{if and .IsAuthenticated 1}}
-                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" 
-                           href="#" id="navbarDropdown" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                           Admin
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                           <li><a class="dropdown-item" href="/admin/dashboard">Dashboard</a></li>
-                           <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
-                        </ul>
-                     </li>
-                  {{else}}
-                     <a class="nav-link" href="/user/login" tabindex="-1" aria-disabled="true">Login</a>
-                     <li class="nav-item">
-                        <a class="nav-link" href="/user/signup" tabindex="-1" title="Let's have a rest)" aria-disabled="true">Sign Up</a>
-                     </li>
-                  {{end}}
+               <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                     data-bs-toggle="dropdown" aria-expanded="false">
+                     Admin
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                     <li><a class="dropdown-item" href="/admin/dashboard">Dashboard</a></li>
+                     <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
+                  </ul>
+               </li>
+               {{else}}
+               <a class="nav-link" href="/user/login" tabindex="-1" aria-disabled="true">Login</a>
+               <li class="nav-item">
+                  <a class="nav-link" href="/user/signup" tabindex="-1" title="Let's have a rest)"
+                     aria-disabled="true">Sign Up</a>
+               </li>
+               {{end}}
                </li>
             </ul>
          </div>
@@ -119,9 +121,9 @@
    <script src="/static/js/app.js"></script>
 
 
-{{block "js" .}}
+   {{block "js" .}}
 
-{{end}}
+   {{end}}
 
    <script>
       const body = document.body;
@@ -145,7 +147,7 @@
       })
 
       AOS.init();
-   
+
       let attention = Prompt();
 
       (function () {
@@ -185,16 +187,17 @@
       }
 
       {{with .Error}}
-         notify("{{.}}", "error")
-      {{end}}
+      notify("{{.}}", "error")
+      {{end }}
       {{with .Flash}}
-         notify("{{.}}", "success")
-      {{end}}
+      notify("{{.}}", "success")
+      {{end }}
       {{with .Warning}}
-         notify("{{.}}", "warning")
+      notify("{{.}}", "warning")
       {{end}}
    </script>
 
 </body>
+
 </html>
 {{end}}

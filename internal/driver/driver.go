@@ -33,8 +33,20 @@ func ConnectSQL(dsn string) (*DB, error) {
 	d.SetConnMaxLifetime(maxDBLifeTime)
 
 	conn.SQL = d
-
+	err = testDB(d)
+	if err != nil {
+		return nil, err
+	}
 	return conn, nil
+}
+
+// testDB tries to ping the database
+func testDB(d *sql.DB) error {
+	err := d.Ping()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // NewDatabase creates a new database to application
