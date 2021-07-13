@@ -603,7 +603,7 @@ func (m *Repository) AdminNewReservations(w http.ResponseWriter, r *http.Request
 	data := make(map[string]interface{})
 	data["reservations"] = reservations
 
-	render.Template(w, r, "admin-all-reservations.page.html", &models.TemplateData{
+	render.Template(w, r, "admin-new-reservations.page.html", &models.TemplateData{
 		Data: data,
 	})
 }
