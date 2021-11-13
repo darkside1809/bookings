@@ -68,3 +68,11 @@ type MailData struct {
 	Content	string	`json:"content"`
 	Template string	`json:"template"`
 }
+
+type DBconfigs struct {
+	Name 		string
+	Host 		string
+	Port 		string
+	Password string
+	User 		string
+}

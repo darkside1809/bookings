@@ -9,19 +9,22 @@ import (
 	"net/http"
 	"os"
 	"time"
+
 	// External packages/dependencies
 	"github.com/alexedwards/scs/v2"
+	"github.com/joho/godotenv"
+
 	// My own packages
+	"github.com/darkside1809/bookings/cmd/server"
 	"github.com/darkside1809/bookings/internal/driver"
 	"github.com/darkside1809/bookings/internal/handlers"
 	"github.com/darkside1809/bookings/internal/helpers"
 	"github.com/darkside1809/bookings/internal/models"
 	"github.com/darkside1809/bookings/internal/render"
-	"github.com/darkside1809/bookings/cmd/server"
 )
 
-// Main function start listen and serve a server at 0.0.0.0:9999
 func main() {
+
 	db, err := execute()
 	if err != nil {
 		log.Fatal(err)
@@ -32,16 +35,14 @@ func main() {
 	fmt.Println("Starting mail listener...")
 	server.ListenForMail()
 
-	host := "0.0.0.0"
-	port := "9999"
+	host, port := os.Getenv("SERVER_HOST"), os.Getenv("SERVER_PORT")
 	srv := &http.Server{
 		Addr:    net.JoinHostPort(host, port),
 		Handler: server.Routes(&server.App),
 	}
 
-	fmt.Printf("Server start listening at %s ;) Let's GOOO!\n", srv.Addr,)
-	err = srv.ListenAndServe()
-	if err != nil {
+	fmt.Printf("Server start listening at %s ;) Let's Gooo!\n", srv.Addr,)
+	if err = srv.ListenAndServe(); err != nil {
 		os.Exit(1)
 	}
 }
@@ -51,6 +52,57 @@ func main() {
 // creates templates and set to them default pattern,
 // uses NewRepo, NewHandlers, NewRenderer, NewHelpers to initialize the server to work properly
 func execute() (*driver.DB, error) {
+	
+	setServerConfigs()
+	
+	// Connect to database
+	log.Println("Connecting to database...")
+
+	dsn := setDBconfigs()
+	db, err := driver.ConnectSQL(dsn)
+	if err != nil {
+		log.Fatal("Cannot connect to database!")
+	}
+	
+	tc, err := render.CreateTemplateCache()
+	if err != nil {
+		log.Fatal("Can't create template cache")
+		return nil, err
+	}
+	log.Println("Creating templates...")
+	server.App.TemplateCache = tc
+	server.App.UseCache = false
+
+	repo := handlers.NewRepo(&server.App, db)
+	handlers.NewHandlers(repo)
+	render.NewRenderer(&server.App)
+	helpers.NewHelpers(&server.App)
+
+	return db, nil
+}
+
+func setDBconfigs() (dsn string){
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("Can't load env vars")
+		return ""
+	}
+	
+	dbConfigs := models.DBconfigs {
+		Name: os.Getenv("DB_NAME"),
+		Port: os.Getenv("DB_PORT"),
+		Host: os.Getenv("DB_HOST"),
+		Password: os.Getenv("DB_PASSWORD"),
+		User: os.Getenv("DB_USER"),
+	}
+
+	dsn = fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s", dbConfigs.Host, dbConfigs.Port, dbConfigs.Name, dbConfigs.User, dbConfigs.Password)
+
+	return dsn
+}
+
+func setServerConfigs() {
+	
 	gob.Register(models.Reservation{})
 	gob.Register(models.User{})
 	gob.Register(models.Room{})
@@ -73,27 +125,4 @@ func execute() (*driver.DB, error) {
 	server.Session.Cookie.Secure = server.App.InProduction
 
 	server.App.Session = server.Session
-
-	// Connect to database
-	log.Println("Connecting to database...")
-	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=bookings user=postgres password=nekruz1809")
-	if err != nil {
-		log.Fatal("Cannot connect to database!")
-	}
-	
-	tc, err := render.CreateTemplateCache()
-	if err != nil {
-		log.Fatal("Can't create template cache")
-		return nil, err
-	}
-	log.Println("Creating templates...")
-	server.App.TemplateCache = tc
-	server.App.UseCache = false
-
-	repo := handlers.NewRepo(&server.App, db)
-	handlers.NewHandlers(repo)
-	render.NewRenderer(&server.App)
-	helpers.NewHelpers(&server.App)
-
-	return db, nil
 }
