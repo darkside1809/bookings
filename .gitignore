@@ -1,3 +1,5 @@
 .idea
-# coverage.out
-# database.yml
+/coverage.out
+database.yml
+*.vscode
+*.env
